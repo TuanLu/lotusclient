@@ -16,10 +16,10 @@
     "react-chartjs-2": "^2.7.2",
     "react-dom": "^16.3.0",
     "react-redux": "^5.0.7",
-    "react-table": "^6.8.4",
+    "react-table": "^6.8.5",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
-    "redux-undo": "^0.6.1",
+    "redux-undo": "^1.0.0-beta9-9-7",
     "semantic-ui-react": "^0.79.0"
   },
   "devDependencies": {

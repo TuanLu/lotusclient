@@ -12,7 +12,7 @@ module.exports = {
       //"react-dom": "preact-compat",
       ACTION_TYPES: path.resolve(__dirname, 'app/actions/ACTION_TYPES'),
       actions: path.resolve(__dirname, 'app/actions/index'),
-      ISD_API: path.resolve(__dirname, 'app/api/'),
+      ISD_API: path.resolve(__dirname, 'app/api/api'),
     },
   },
   module: {
