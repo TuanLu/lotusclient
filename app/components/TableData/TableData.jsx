@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactTable from 'react-table'
-import data from './data'
 import {convertObjectsToArray} from 'ISD_API'
 import _ from "lodash";
 
