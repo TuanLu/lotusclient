@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactTable from 'react-table'
+import SmartControl from './SmartControl'
 import {requestData} from 'ISD_API'
 
 export default class TableData extends React.Component {
@@ -13,7 +14,28 @@ export default class TableData extends React.Component {
     const { data} = this.state;
     return (
       <div>
+        <SmartControl {...this.state}/>
         <ReactTable
+          getTdProps={(state, rowInfo, column, instance) => {
+            return {
+              onClick: (e, handleOriginal) => {
+                console.log("A Td Element was clicked!");
+                console.log("it produced this event:", e);
+                console.log("It was in this column:", column);
+                console.log("It was in this row:", rowInfo);
+                console.log("It was in this table instance:", instance);
+        
+                // IMPORTANT! React-Table uses onClick internally to trigger
+                // events like expanding SubComponents and pivots.
+                // By default a custom 'onClick' handler will override this functionality.
+                // If you want to fire the original onClick handler, call the
+                // 'handleOriginal' function.
+                if (handleOriginal) {
+                  handleOriginal();
+                }
+              }
+            };
+          }}
           filterable
           data={data}
           columns={[
@@ -118,6 +140,9 @@ export default class TableData extends React.Component {
           ]}
           data={data}
           filterable
+          onFilteredChange={(data) => {
+            console.log(data);
+          }}
           defaultPageSize={10}
           className="-striped -highlight"
         />

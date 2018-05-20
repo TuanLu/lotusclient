@@ -11,22 +11,29 @@ const rootEl = document.getElementById('isd_app')
 //let defaultProps = getDefaultAppProps();
 //store.dispatch(startApp(defaultProps));
 //Loading data from server 
-let api = 'http://erpapp';
-fetch('/')
-  .then(function(response) {
-    return response.json()
-  }).then(function(json) {
-    store.dispatch(updateStateData({
-      orderData: json
-    }));
-    ReactDOM.render(
-      <Provider store={store}>
-        <MainComponent/>
-      </Provider>
-      ,
-      rootEl
-    );
-  }).catch(function(ex) {
-    console.log('parsing failed', ex)
-  })
+//let api = 'http://erpapp';
+// fetch('/')
+//   .then(function(response) {
+//     return response.json()
+//   }).then(function(json) {
+//     store.dispatch(updateStateData({
+//       orderData: json
+//     }));
+//     ReactDOM.render(
+//       <Provider store={store}>
+//         <MainComponent/>
+//       </Provider>
+//       ,
+//       rootEl
+//     );
+//   }).catch(function(ex) {
+//     console.log('parsing failed', ex)
+//   })
+ReactDOM.render(
+  <Provider store={store}>
+    <MainComponent/>
+  </Provider>
+  ,
+  rootEl
+);
 
