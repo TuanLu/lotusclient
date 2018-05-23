@@ -3,7 +3,9 @@ import {cloneDeep} from 'lodash'
 
 
 let _designDefault = {
-    
+    filter: {
+      year: 2017//(new Date()).getFullYear()
+    }
   },
   cloneState;
 
