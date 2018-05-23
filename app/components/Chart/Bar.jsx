@@ -1,5 +1,5 @@
 import React from 'react';
-import {Bar} from 'react-chartjs-2'
+import {Bar, HorizontalBar} from 'react-chartjs-2'
 import { Dimmer, Loader} from 'semantic-ui-react'
 
 export default class BarChart extends React.Component {
@@ -62,14 +62,27 @@ export default class BarChart extends React.Component {
     return (
       <div className="ui segment">
         {this.state.dataUpToDate ? 
-          <Bar
-            redraw={true}
-            legend={legend}
-            data={data}
-            width={width || 300}
-            height={height || 300}
-            options={options}
-          />
+          <React.Fragment>
+          {this.props.type == "horizontalBar" ? 
+            <HorizontalBar
+              redraw={true}
+              legend={legend}
+              data={data}
+              width={width || 300}
+              height={height || 300}
+              options={options}
+            />
+            : 
+            <Bar
+              redraw={true}
+              legend={legend}
+              data={data}
+              width={width || 300}
+              height={height || 300}
+              options={options}
+            />
+          }
+          </React.Fragment>
           : 
           <Loader active inline content="Loading"/>
           }

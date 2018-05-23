@@ -14,7 +14,7 @@ class ReportComponent extends Component{
     let {year, product} = this.props.mainState.filter;
     return (
       <div className="ui container">  
-        <h1>Tất cả biểu đồ</h1>
+        <h1 style={{textAlign: 'center'}}>Các biểu đồ báo cáo theo thời gian</h1>
         <div className="ui grid equal width">
           <div className="column">
             <Filter dispatch={this.props.dispatch} mainState={this.props.mainState}/>
@@ -35,6 +35,14 @@ class ReportComponent extends Component{
           <div className="column">
             <Bar
               url={`http://erpapp/report?year=${year}&type=weekofyear`}
+            />
+          </div>
+        </div>
+        <div className="ui grid equal width">
+          <div className="column">
+            <Bar
+              type="horizontalBar"
+              url={`http://erpapp/report?year=${year}&type=products`}
             />
           </div>
         </div>
