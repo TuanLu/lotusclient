@@ -7,7 +7,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 module.exports = merge(common, {
   entry: {
-    lotusimport: ['./app/app.production.jsx']
+    lotuschart: ['./app/chart.production.jsx']
   },
   mode: 'production',
   plugins: [
@@ -37,7 +37,7 @@ module.exports = merge(common, {
         cacheGroups: {
           commons: { 
             test: /[\\/]node_modules[\\/]/, 
-            name: "vendors", 
+            name: "chart.vendors", 
             chunks: "all" 
           },
           // commons: { 
