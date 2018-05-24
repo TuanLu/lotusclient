@@ -75,19 +75,6 @@ export default class TableData extends React.Component {
               ]
             },
             {
-              Header: "Doanh Thu (triệu)",
-              columns: [
-                {
-                  Header: "Mục tiêu",
-                  accessor: "K"
-                },
-                {
-                  Header: "Thực tế",
-                  accessor: "L",
-                },
-              ]
-            },
-            {
               Header: "Địa chỉ",
               columns: [
                 {
@@ -101,39 +88,6 @@ export default class TableData extends React.Component {
                 {
                   Header: "Miền",
                   accessor: "O"
-                },
-              ]
-            },
-            {
-              Header: "Thời Gian",
-              columns: [
-                {
-                  Header: "Năm",
-                  accessor: "Q"
-                },
-                {
-                  Header: "Quý",
-                  accessor: "R"
-                },
-                {
-                  Header: "Tháng",
-                  accessor: "S"
-                },
-                {
-                  Header: "Tuần trong năm",
-                  accessor: "T"
-                },
-                {
-                  Header: "Tuần trong tháng",
-                  accessor: "U"
-                },
-                {
-                  Header: "Ngày trong tháng",
-                  accessor: "V"
-                },
-                {
-                  Header: "Thứ trong tuần",
-                  accessor: "W"
                 },
               ]
             },

@@ -23,18 +23,18 @@ class ReportComponent extends Component{
         <div className="grid ui equal width">
           <div className="column">
             <Bar 
-              url={`http://erpapp/report?year=${year}`}/>
+              url={`http://erpapp/report?year=${year}&product-id=${product}`}/>
           </div>
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=month`}
+              url={`http://erpapp/report?year=${year}&type=month&product-id=${product}`}
             />
           </div>
         </div>
         <div className="ui grid equal width">
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=weekofyear`}
+              url={`http://erpapp/report?year=${year}&type=weekofyear&product-id=${product}`}
             />
           </div>
         </div>

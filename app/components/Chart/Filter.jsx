@@ -24,23 +24,33 @@ export default class Filter extends React.Component {
     this.state = {
       yearOptions : yearOptions,
       productOptions: [
-        {
-          key: 'all',
-          value: 'all',
-          text: 'Tất cả sản phẩm'
-        },
-        {
-          key: 'hnc',
-          value: 'hnc',
-          text: 'Hoàn Nguyên Cốt'
-        },
-        {
-          key: 'tdk',
-          value: 'tdk',
-          text: 'Tuệ Đức Kids'
-        },
+        
       ]
     }
+  }
+  componentDidMount() {
+    fetch('/product')
+    .then((response) => {
+      return response.json();
+    }).then((json) => {
+      if(json.status && json.status == "error") {
+        console.warn(json.message);
+        return false;
+      }
+      if(json.data) {
+        let productOptions = json.data.map((product) => {
+          return {
+            key: product.product_id,
+            value: product.product_id,
+            text: product.name
+          }
+        });
+        this.setState({productOptions: productOptions});
+
+      }
+    }).catch((error) => {
+      console.log('parsing failed', error)
+    });
   }
   
   render() {
