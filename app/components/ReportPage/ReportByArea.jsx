@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import Bar from './Chart/Bar'
+import {updateStateData} from 'actions'
 import FilterByYear from './Filter/FilterByYear'
 import FilterByProduct from './Filter/FilterByProduct'
-import {updateStateData} from 'actions'
 
-class ReportComponent extends Component{
+class ReportByArea extends Component{
   render() {
     let {year, product} = this.props.mainState.filter;
     return (
@@ -22,7 +22,7 @@ class ReportComponent extends Component{
         <div className="grid ui padded equal width">
           <div className="column">
             <Bar 
-              url={`http://erpapp/report?year=${year}&type=year&product-id=${product}`}/>
+              url={`http://erpapp/report?year=${year}&type=areas&product-id=${product}`}/>
           </div>
           <div className="column">
             <Bar
@@ -52,4 +52,4 @@ export default connect((state) => {
     mainState: state.main.present,
     uiState: state.ui,
   }
-})(ReportComponent);
+})(ReportByArea);

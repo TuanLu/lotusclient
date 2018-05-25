@@ -34,7 +34,8 @@ export default class BarChart extends React.Component {
           width: json.width,
           height: json.height,
           showChart: true,
-          dataUpToDate: true
+          dataUpToDate: true,
+          legend: json.legend || {}
         });
       }).catch((error) => {
         console.log('parsing failed', error)
@@ -51,6 +52,43 @@ export default class BarChart extends React.Component {
   }
   componentDidMount() {
     this.fetchData();
+    
+    // Chart.pluginService.register({
+    //   beforeRender: function (chart) {
+    //     if (chart.config.options.showAllTooltips) {
+    //       chart.pluginTooltips = [];
+    //       chart.config.data.datasets.forEach(function (dataset, i) {
+    //         chart.getDatasetMeta(i).data.forEach(function (sector, j) {
+    //           chart.pluginTooltips.push(new Chart.Tooltip({
+    //             _chart: chart.chart,
+    //             _chartInstance: chart,
+    //             _data: chart.data,
+    //             _options: chart.options.tooltips,
+    //             _active: [sector]
+    //           }, chart));
+    //         });
+    //       });
+    //       // turn off normal tooltips
+    //       chart.options.tooltips.enabled = false;
+    //     }
+    //   }, afterDraw: function (chart, easing) {
+    //     if (chart.config.options.showAllTooltips) {
+    //       // we don't want the permanent tooltips to animate, so don't do anything till the animation runs atleast once
+    //       if (!chart.allTooltipsOnce) {
+    //         if (easing !== 1) return;
+    //         chart.allTooltipsOnce = true;
+    //       }
+    //       chart.options.tooltips.enabled = true;
+    //       Chart.helpers.each(chart.pluginTooltips, function (tooltip) {
+    //         tooltip.initialize();
+    //         tooltip.update(); // we don't actually need this since we are not animating tooltips
+    //         tooltip.pivot();
+    //         tooltip.transition(easing).draw();
+    //       });
+    //       chart.options.tooltips.enabled = false;
+    //     }
+    //   }
+    // });
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.dataUpToDate === null) {
@@ -59,6 +97,35 @@ export default class BarChart extends React.Component {
   }
   render() {
     let {data, options, width, height, legend} = this.state;
+    options = {
+      ...options,
+      _tooltips: {
+        //mode: 'dataset',
+        //intersect: false,
+        enabled : false,
+        callbacks: {
+          label: function(tooltipItem) {
+              return tooltipItem.yLabel;
+          },
+          title: function(tooltipItem) {
+            return '';
+          },
+        },
+        backgroundColor: 'gold',
+        // //titleFontSize: 16,
+        // titleFontColor: '#0066ff',
+        bodyFontColor: '#006699',
+        bodyFontSize: 12,
+        bodyFontStyle: 'bold',
+        xPadding: 4,
+        yPadding: 4,
+        //caretSize: 2,
+        caretPadding: 0,
+        //cornerRadius: 0,
+        displayColors: false
+      },
+    };
+    //console.log(options);
     return (
       <div className="ui segment">
         {this.state.dataUpToDate ? 

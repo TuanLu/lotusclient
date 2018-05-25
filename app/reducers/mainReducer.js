@@ -8,7 +8,7 @@ let _designDefault = {
       product: 'all'
     },
     products: [],
-    reportBy: 'doanh_thu_tong'
+    reportBy: 'theo_mien'
   },
   cloneState;
 
