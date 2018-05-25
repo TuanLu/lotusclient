@@ -5,10 +5,10 @@ class SidebarComponent extends Component {
       <React.Fragment>
         <div className="main_menu">
           <div className="menu_item active">
-            <div className="info">Biểu đồ doanh thu</div>
+            <div className="info">Doanh thu theo năm</div>
           </div>
           <div className="menu_item">
-            <div className="info">Biểu đồ Nhà Thuốc</div>
+            <div className="info">Doanh thu theo miền</div>
           </div>
           <div className="menu_item">
             <div className="info">Biểu đồ Sản Phẩm</div>

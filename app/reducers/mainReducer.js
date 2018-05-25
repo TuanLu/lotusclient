@@ -6,7 +6,8 @@ let _designDefault = {
     filter: {
       year: 2017,//(new Date()).getFullYear(),
       product: 'all'
-    }
+    },
+    products: []
   },
   cloneState;
 

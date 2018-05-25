@@ -42,16 +42,7 @@ class ReportComponent extends Component{
               url={`http://erpapp/report?year=${year}&type=weekofyear&product-id=${product}`}
             />
           </div>
-        </div>
-        <div className="ui grid padded equal width">
-          <div className="column">
-            <Bar
-              type="horizontalBar"
-              url={`http://erpapp/report?year=${year}&type=products`}
-            />
-          </div>
-        </div>
-      
+        </div>      
       </React.Fragment>
     );
   }
