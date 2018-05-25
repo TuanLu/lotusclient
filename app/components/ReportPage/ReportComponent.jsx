@@ -13,32 +13,37 @@ class ReportComponent extends Component{
   render() {
     let {year, product} = this.props.mainState.filter;
     return (
-      <div className="ui container">  
-        <h1 style={{textAlign: 'center'}}>Các biểu đồ báo cáo theo thời gian</h1>
-        <div className="ui grid equal width">
+      <React.Fragment>
+        <div className="ui grid padded equal width">
           <div className="column">
             <Filter dispatch={this.props.dispatch} mainState={this.props.mainState}/>
           </div>
         </div>
-        <div className="grid ui equal width">
+        <div className="grid ui padded equal width">
           <div className="column">
             <Bar 
-              url={`http://erpapp/report?year=${year}&product-id=${product}`}/>
+              url={`http://erpapp/report?year=${year}&type=year&product-id=${product}`}/>
           </div>
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=month&product-id=${product}`}
+              url={`http://erpapp/report?year=${year}&type=quarter&product-id=${product}`}/>
+          </div>
+        </div>
+        <div className="ui grid padded equal width">
+          <div className="column">
+            <Bar
+               url={`http://erpapp/report?year=${year}&type=month&product-id=${product}`}
             />
           </div>
         </div>
-        <div className="ui grid equal width">
+        <div className="ui grid padded equal width">
           <div className="column">
             <Bar
               url={`http://erpapp/report?year=${year}&type=weekofyear&product-id=${product}`}
             />
           </div>
         </div>
-        <div className="ui grid equal width">
+        <div className="ui grid padded equal width">
           <div className="column">
             <Bar
               type="horizontalBar"
@@ -46,7 +51,8 @@ class ReportComponent extends Component{
             />
           </div>
         </div>
-      </div>
+      
+      </React.Fragment>
     );
   }
 };

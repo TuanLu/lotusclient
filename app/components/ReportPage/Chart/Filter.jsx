@@ -24,7 +24,11 @@ export default class Filter extends React.Component {
     this.state = {
       yearOptions : yearOptions,
       productOptions: [
-        
+        {
+          key: 'all',
+          value: 'all',
+          text: 'Tất cả sản phẩm'
+        }
       ]
     }
   }
@@ -45,7 +49,7 @@ export default class Filter extends React.Component {
             text: product.name
           }
         });
-        this.setState({productOptions: productOptions});
+        this.setState({productOptions: [...this.state.productOptions, ...productOptions]});
 
       }
     }).catch((error) => {
@@ -81,9 +85,9 @@ export default class Filter extends React.Component {
                 }
               }));
             }}
-            placeholder='Chọn Sản Phẩm' 
-            search 
+            placeholder='Chọn Sản Phẩm'  
             selection 
+            defaultValue={`all`}
             options={this.state.productOptions} />
         </div>
       </div>
