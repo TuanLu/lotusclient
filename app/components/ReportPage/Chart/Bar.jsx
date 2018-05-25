@@ -99,30 +99,30 @@ export default class BarChart extends React.Component {
     let {data, options, width, height, legend} = this.state;
     options = {
       ...options,
-      _tooltips: {
+      tooltips: {
         //mode: 'dataset',
         //intersect: false,
-        enabled : false,
-        callbacks: {
-          label: function(tooltipItem) {
-              return tooltipItem.yLabel;
-          },
-          title: function(tooltipItem) {
-            return '';
-          },
-        },
-        backgroundColor: 'gold',
-        // //titleFontSize: 16,
-        // titleFontColor: '#0066ff',
-        bodyFontColor: '#006699',
-        bodyFontSize: 12,
-        bodyFontStyle: 'bold',
-        xPadding: 4,
-        yPadding: 4,
-        //caretSize: 2,
-        caretPadding: 0,
-        //cornerRadius: 0,
-        displayColors: false
+        // enabled : false,
+        // callbacks: {
+        //   label: function(tooltipItem) {
+        //       return tooltipItem.yLabel;
+        //   },
+        //   title: function(tooltipItem) {
+        //     return '';
+        //   },
+        // },
+        // backgroundColor: 'gold',
+        // // //titleFontSize: 16,
+        // // titleFontColor: '#0066ff',
+        // bodyFontColor: '#006699',
+        // bodyFontSize: 12,
+        // bodyFontStyle: 'bold',
+        // xPadding: 4,
+        // yPadding: 4,
+        // //caretSize: 2,
+        // caretPadding: 0,
+        // //cornerRadius: 0,
+        // displayColors: false
       },
     };
     //console.log(options);
