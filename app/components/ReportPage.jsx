@@ -4,6 +4,22 @@ import Sidebar from './ReportPage/Sidebar'
 import ReportComponent from './ReportPage/ReportComponent'
 
 class ReportPage extends Component {
+  constructor(props) {
+    super(props);
+    this.renderReport = this.renderReport.bind(this);
+  }
+  renderReport() {
+    let {reportBy} = this.props.mainState;
+    switch (reportBy) {
+      case 'theo_mien':
+        return <h2>Hien thi doanh thu theo mien</h2>
+        break;
+    
+      default:
+        return <ReportComponent/>
+        break;
+    }
+  }
   render() {
     let { year, product } = this.props.mainState.filter;
     return (
@@ -30,7 +46,7 @@ class ReportPage extends Component {
             <div className="main_content">
               <div className="main_content_left active" page="main">
                 <div className="list_infos">
-                  <ReportComponent/>
+                  {this.renderReport()}
                 </div>
               </div>
             </div>

@@ -1,21 +1,49 @@
 import React, { Component } from 'react'
+import {updateStateData} from 'actions'
+import {connect} from 'react-redux'
 class SidebarComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.showReportBy = this.showReportBy.bind(this);
+    this.showMenu = this.showMenu.bind(this);
+  }
+  showReportBy(type) {
+    this.props.dispatch(updateStateData({
+      reportBy: type
+    }));
+  }
+  showMenu() {
+    let {reportBy} = this.props.mainState;
+    let menus = [
+      {
+        reportBy: 'doanh_thu_tong',
+        title: 'Doanh thu theo năm'
+      },
+      {
+        reportBy: 'theo_mien',
+        title: 'Doanh thu theo miền'
+      },
+    ];
+    return menus.map((menu, index) => {
+      return (
+        <div 
+          onClick={() => {
+            this.props.dispatch(updateStateData({
+              reportBy: menu.reportBy
+            }));
+          }}
+          key={index} 
+          className={`menu_item ${reportBy == menu.reportBy ? 'active': ''}`}>
+          <div className="info">{menu.title}</div>
+        </div>
+      );
+    });
+  }
   render() {
     return (
       <React.Fragment>
         <div className="main_menu">
-          <div className="menu_item active">
-            <div className="info">Doanh thu theo năm</div>
-          </div>
-          <div className="menu_item">
-            <div className="info">Doanh thu theo miền</div>
-          </div>
-          <div className="menu_item">
-            <div className="info">Biểu đồ Sản Phẩm</div>
-          </div>
-          <div className="menu_item">
-            <div className="info">Biểu đồ địa lý</div>
-          </div>
+          {this.showMenu()}
           <div className="menu_item">
             <div className="info">Quản lý kế hoạch</div>
           </div>
@@ -30,4 +58,8 @@ class SidebarComponent extends Component {
     );
   }
 };
-export default SidebarComponent
+export default connect((state) => {
+  return {
+    mainState: state.main.present,
+  }
+})(SidebarComponent);

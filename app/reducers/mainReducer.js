@@ -7,7 +7,8 @@ let _designDefault = {
       year: 2017,//(new Date()).getFullYear(),
       product: 'all'
     },
-    products: []
+    products: [],
+    reportBy: 'doanh_thu_tong'
   },
   cloneState;
 
