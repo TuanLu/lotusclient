@@ -5,7 +5,8 @@ import {cloneDeep} from 'lodash'
 let _designDefault = {
     filter: {
       year: 2017,//(new Date()).getFullYear(),
-      product: 'all'
+      product: 'all',
+      area: 'all'
     },
     products: [],
     reportBy: 'theo_mien'

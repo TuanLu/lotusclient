@@ -10,7 +10,8 @@ import {getDefaultAppProps} from 'ISD_API'
 //import rootSaga from './sagas';
 window.ISD_BASE_URL = 'http://erpapp/';
 window.ISD_CONFIG = {
-  defaultYear: 2017
+  defaultYear: 2017,
+  defaultArea: 'all'
 }
 const rootEl = document.getElementById('isd_chart')
 ReactDOM.render(

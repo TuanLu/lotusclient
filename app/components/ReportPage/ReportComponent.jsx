@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import Bar from './Chart/Bar'
 import FilterByYear from './Filter/FilterByYear'
 import FilterByProduct from './Filter/FilterByProduct'
+import FilterLabel from './Filter/FilterLabel'
 import {updateStateData} from 'actions'
 
 class ReportComponent extends Component{
@@ -13,6 +14,7 @@ class ReportComponent extends Component{
         <div className="ui grid padded equal width">
           <div className="column">
             <div className="ui segment">
+             <FilterLabel/>
               <FilterByYear/>
               {" | "}
               <FilterByProduct/>

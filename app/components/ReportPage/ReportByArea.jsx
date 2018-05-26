@@ -4,18 +4,23 @@ import Bar from './Chart/Bar'
 import {updateStateData} from 'actions'
 import FilterByYear from './Filter/FilterByYear'
 import FilterByProduct from './Filter/FilterByProduct'
+import FilterByArea from './Filter/FilterByArea'
+import FilterLabel from './Filter/FilterLabel'
 
 class ReportByArea extends Component{
   render() {
-    let {year, product} = this.props.mainState.filter;
+    let {year, product, area} = this.props.mainState.filter;
     return (
       <React.Fragment>
         <div className="ui grid padded equal width">
           <div className="column">
             <div className="ui segment">
+              <FilterLabel/>
               <FilterByYear/>
               {" | "}
               <FilterByProduct/>
+              {" | "}
+              <FilterByArea/>
             </div>
           </div>
         </div>
@@ -24,22 +29,24 @@ class ReportByArea extends Component{
             <Bar 
               url={`http://erpapp/report?year=${year}&type=areas&product-id=${product}`}/>
           </div>
+        </div>
+        <div className="grid ui padded equal width">
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=quarter&product-id=${product}`}/>
+              url={`http://erpapp/report?year=${year}&type=area_quarter&product-id=${product}&area=${area}`}/>
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
             <Bar
-               url={`http://erpapp/report?year=${year}&type=month&product-id=${product}`}
+               url={`http://erpapp/report?year=${year}&type=area_month&product-id=${product}&area=${area}`}
             />
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=weekofyear&product-id=${product}`}
+              url={`http://erpapp/report?year=${year}&type=area_week&product-id=${product}&area=${area}`}
             />
           </div>
         </div>      
