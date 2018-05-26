@@ -11,15 +11,11 @@ class ReportComponent extends Component{
     let {year, product} = this.props.mainState.filter;
     return (
       <React.Fragment>
-        <div className="ui grid padded equal width">
-          <div className="column">
-            <div className="ui segment">
-             <FilterLabel/>
-              <FilterByYear/>
-              {" | "}
-              <FilterByProduct/>
-            </div>
-          </div>
+        <div className="ui segment">
+          <FilterLabel/>
+          <FilterByYear/>
+          {" | "}
+          <FilterByProduct/>
         </div>
         <div className="grid ui padded equal width">
           <div className="column">

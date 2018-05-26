@@ -6,28 +6,30 @@ import Bar from './Chart/Bar'
 import {updateStateData} from 'actions'
 import FilterByYear from './Filter/FilterByYear'
 import FilterByQuarter from './Filter/FilterByQuarter'
+import FilterByMonth from './Filter/FilterByMonth'
+import FilterByWeek from './Filter/FilterByWeek'
 import FilterByProduct from './Filter/FilterByProduct'
 import FilterByArea from './Filter/FilterByArea'
 import FilterLabel from './Filter/FilterLabel'
 
 class ReportByProvinces extends Component{
   render() {
-    let {year, product, area, quarter} = this.props.mainState.filter;
+    let {year, product, area, quarter, month, week} = this.props.mainState.filter;
     return (
       <React.Fragment>
-        <div className="ui grid padded equal width">
-          <div className="column">
-            <div className="ui segment">
-              <FilterLabel/>
-              <FilterByArea required/>
-              {" | "}
-              <FilterByProduct/>
-              {" | "}
-              <FilterByYear/>
-              {" | "}
-              <FilterByQuarter/>
-            </div>
-          </div>
+        <div className="ui segment">
+          <FilterLabel/>
+          <FilterByArea required/>
+          {" | "}
+          <FilterByProduct/>
+          {" | "}
+          <FilterByYear/>
+          {" | "}
+          <FilterByQuarter/>
+          {" | "}
+          <FilterByMonth/>
+          {" | "}
+          <FilterByWeek/>
         </div>
         <div className="grid ui padded equal width">
           <div className="column">
@@ -45,16 +47,16 @@ class ReportByProvinces extends Component{
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
-            {/* <Bar
-               url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_month&product-id=${product}&area=${area}`}
-            /> */}
+          <Bar
+              type="horizontalBar"
+              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_month&product-id=${product}&area=${area}&month=${month}`}/>
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
-            {/* <Bar
-              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_week&product-id=${product}&area=${area}`}
-            /> */}
+          <Bar
+              type="horizontalBar"
+              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_week&product-id=${product}&area=${area}&week=${week}`}/>
           </div>
         </div>      
       </React.Fragment>

@@ -30,6 +30,7 @@ class FilterByQuarter extends React.Component {
   render() {
     return (
       <Dropdown 
+        compact
         onChange={(event, data) => {
           if(this.props.mainState.filter.quarter == data.value) return false;
           this.props.dispatch(updateStateData({

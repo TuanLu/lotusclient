@@ -20,6 +20,7 @@ class Year extends React.Component {
   render() {
     return (
       <Dropdown 
+        compact
         onChange={(event, data) => {
           if(this.props.mainState.filter.year == data.value) return false;
           this.props.dispatch(updateStateData({
