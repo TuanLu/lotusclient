@@ -3,7 +3,7 @@ import { Dropdown } from 'semantic-ui-react'
 import {updateStateData} from 'actions'
 import {connect} from 'react-redux'
 
-const areaOptions = [
+let areaOptions = [
   {
     key: 'all',
     value: 'all',

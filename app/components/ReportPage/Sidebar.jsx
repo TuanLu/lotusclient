@@ -17,7 +17,7 @@ class SidebarComponent extends Component {
     let menus = [
       {
         reportBy: 'doanh_thu_tong',
-        title: 'Doanh thu theo năm'
+        title: 'Doanh thu theo năm',
       },
       {
         reportBy: 'theo_mien',
@@ -25,16 +25,30 @@ class SidebarComponent extends Component {
       },
       {
         reportBy: 'theo_tinh',
-        title: 'Doanh thu theo tỉnh'
+        title: 'Doanh thu theo tỉnh',
+        filter: {
+          area: 'b',
+          quarter: 1
+        }
       },
     ];
     return menus.map((menu, index) => {
       return (
         <div 
           onClick={() => {
-            this.props.dispatch(updateStateData({
+            let updateData = {
               reportBy: menu.reportBy
-            }));
+            };
+            if(menu.filter) {
+              updateData = {
+                ...updateData,
+                filter: {
+                  ...this.props.mainState.filter,
+                  ...menu.filter
+                }
+              }
+            }
+            this.props.dispatch(updateStateData(updateData));
           }}
           key={index} 
           className={`menu_item ${reportBy == menu.reportBy ? 'active': ''}`}>

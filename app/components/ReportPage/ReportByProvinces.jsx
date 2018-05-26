@@ -19,7 +19,7 @@ class ReportByProvinces extends Component{
           <div className="column">
             <div className="ui segment">
               <FilterLabel/>
-              <FilterByArea/>
+              <FilterByArea required/>
               {" | "}
               <FilterByProduct/>
               {" | "}
