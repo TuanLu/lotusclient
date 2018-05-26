@@ -46,7 +46,7 @@ class FilterByArea extends React.Component {
         }}
         placeholder='Chọn Vùng Miền' 
         selection 
-        defaultValue={ISD_CONFIG.defaultArea}
+        value={this.props.mainState.filter.area}
         options={areaOptions} />
     );
   }

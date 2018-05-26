@@ -23,6 +23,10 @@ class SidebarComponent extends Component {
         reportBy: 'theo_mien',
         title: 'Doanh thu theo miền'
       },
+      {
+        reportBy: 'theo_tinh',
+        title: 'Doanh thu theo tỉnh'
+      },
     ];
     return menus.map((menu, index) => {
       return (

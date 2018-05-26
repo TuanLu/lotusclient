@@ -31,7 +31,7 @@ class Year extends React.Component {
         }}
         placeholder='Chọn Năm' 
         selection 
-        defaultValue={ISD_CONFIG.defaultYear}//(new Date).getFullYear()}
+        value={this.props.mainState.filter.year}
         options={yearOptions} />
     );
   }

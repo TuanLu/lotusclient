@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Sidebar from './ReportPage/Sidebar'
 import ReportComponent from './ReportPage/ReportComponent'
 import ReportByArea from './ReportPage/ReportByArea'
+import ReportByProvinces from './ReportPage/ReportByProvinces'
 
 //Global config chart
 Chart.defaults.global.hover.mode = 'nearest';
@@ -54,7 +55,9 @@ class ReportPage extends Component {
       case 'theo_mien':
         return <ReportByArea/>
         break;
-    
+      case 'theo_tinh':
+        return <ReportByProvinces/>
+        break;
       default:
         return <ReportComponent/>
         break;

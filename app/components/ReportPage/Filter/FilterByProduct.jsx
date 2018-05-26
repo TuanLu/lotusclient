@@ -66,7 +66,7 @@ class Product extends React.Component {
         selection 
         search
         loading={this.state.productOptions.length == 1 ? true : false}
-        defaultValue={`all`}
+        value={this.props.mainState.filter.product}
         options={this.state.productOptions} />
     );
   }

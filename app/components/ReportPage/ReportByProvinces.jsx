@@ -1,53 +1,60 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import Bar from './Chart/Bar'
+//import ProvinceChart from './Chart/ProvinceChart'
+//import ProvinceChartQuarter from './Chart/ProvinceChartQuarter'
 import {updateStateData} from 'actions'
 import FilterByYear from './Filter/FilterByYear'
+import FilterByQuarter from './Filter/FilterByQuarter'
 import FilterByProduct from './Filter/FilterByProduct'
 import FilterByArea from './Filter/FilterByArea'
 import FilterLabel from './Filter/FilterLabel'
 
-class ReportByArea extends Component{
+class ReportByProvinces extends Component{
   render() {
-    let {year, product, area} = this.props.mainState.filter;
+    let {year, product, area, quarter} = this.props.mainState.filter;
     return (
       <React.Fragment>
         <div className="ui grid padded equal width">
           <div className="column">
             <div className="ui segment">
               <FilterLabel/>
-              <FilterByYear/>
-              {" | "}
               <FilterByArea/>
               {" | "}
               <FilterByProduct/>
+              {" | "}
+              <FilterByYear/>
+              {" | "}
+              <FilterByQuarter/>
             </div>
           </div>
         </div>
         <div className="grid ui padded equal width">
           <div className="column">
             <Bar 
-              url={`http://erpapp/report?year=${year}&type=areas&product-id=${product}`}/>
+              type="horizontalBar"
+              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces&product-id=${product}&area=${area}`}/>
           </div>
         </div>
         <div className="grid ui padded equal width">
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=area_quarter&product-id=${product}&area=${area}`}/>
+              type="horizontalBar"
+              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_quarter&product-id=${product}&area=${area}&quarter=${quarter}`}/>
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
-            <Bar
-               url={`http://erpapp/report?year=${year}&type=area_month&product-id=${product}&area=${area}`}
-            />
+            {/* <Bar
+               url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_month&product-id=${product}&area=${area}`}
+            /> */}
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
-            <Bar
-              url={`http://erpapp/report?year=${year}&type=area_week&product-id=${product}&area=${area}`}
-            />
+            {/* <Bar
+              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_week&product-id=${product}&area=${area}`}
+            /> */}
           </div>
         </div>      
       </React.Fragment>
@@ -59,4 +66,4 @@ export default connect((state) => {
     mainState: state.main.present,
     uiState: state.ui,
   }
-})(ReportByArea);
+})(ReportByProvinces);

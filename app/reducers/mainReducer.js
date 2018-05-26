@@ -6,10 +6,11 @@ let _designDefault = {
     filter: {
       year: 2017,//(new Date()).getFullYear(),
       product: 'all',
-      area: 'all'
+      area: 'all',
+      quarter: 1
     },
     products: [],
-    reportBy: 'theo_mien'
+    reportBy: 'theo_tinh'
   },
   cloneState;
 

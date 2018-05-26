@@ -132,7 +132,7 @@ export default class BarChart extends React.Component {
           <React.Fragment>
           {this.props.type == "horizontalBar" ? 
             <HorizontalBar
-              redraw={true}
+              redraw={false}
               legend={legend}
               data={data}
               width={width || 300}
@@ -141,7 +141,7 @@ export default class BarChart extends React.Component {
             />
             : 
             <Bar
-              redraw={true}
+              redraw={false}
               legend={legend}
               data={data}
               width={width || 300}
