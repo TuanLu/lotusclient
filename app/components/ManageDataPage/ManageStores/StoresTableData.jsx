@@ -94,6 +94,18 @@ export default class TableData extends React.Component {
       console.log('parsing failed', ex)
     });
   }
+  customFilter(filter, row) {
+    if(row[filter.id] && row[filter.id] != '' && filter.value != '') {
+      return row[filter.id].toLowerCase().includes(filter.value.toLowerCase());
+    }
+    return false;
+  }
+  customFilterDistrict(filter, row) {
+    if(row[filter.id] && row[filter.id] != '' && filter.value != '') {
+      return row[filter.id].toLowerCase().includes(filter.value.toLowerCase());
+    }
+    return false;
+  }
   render() {
     const { data, currentStore} = this.state;
     return (
@@ -166,11 +178,13 @@ export default class TableData extends React.Component {
                 },
                 {
                   Header: "Tên nhà thuốc",
-                  accessor: 'name'
+                  accessor: 'name',
+                  filterMethod: this.customFilter
                 },
                 {
                   Header: "Địa chỉ",
-                  accessor: 'address'
+                  accessor: 'address',
+                  filterMethod: this.customFilter
                 },
                 {
                   Header: "Điện thoại",
@@ -182,8 +196,8 @@ export default class TableData extends React.Component {
                 },
                 {
                   Header: "Mã Quận/Huyện (*)",
-                  accessor: 'district_id',
-                  filterable: false,
+                  accessor: 'huyen',
+                  filterMethod: this.customFilterDistrict,
                   Cell: row => (
                     <div className={`${row.original.district_id == 0 ? 'ui warning message' : ''}`} style={{
                       padding: 2
@@ -198,9 +212,6 @@ export default class TableData extends React.Component {
           ]}
           data={data}
           filterable
-          onFilteredChange={(data) => {
-            console.log(data);
-          }}
           defaultPageSize={20}
           className="-striped -highlight"
         />
