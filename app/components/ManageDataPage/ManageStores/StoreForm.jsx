@@ -91,7 +91,7 @@ class StoreForm extends React.Component {
   handleSubmit = () => {
     if(this.props.onSubmit) {
       let {store_id, name, address, owner, phone, district_id, area_id, province_id} = this.state;
-      if(address == '' || district_id == '0') {
+      if(address == '' || district_id == '0' || district_id == '') {
         alert('Hãy nhập đầy đủ thông tin ở các trường có dấu (*)');
         return false;
       }

@@ -43,15 +43,21 @@ export default class TableData extends React.Component {
     }).then((json) => {
       //Update table data 
       if(json.data) {
-        let newData = this.state.data.map((store) => {
-          if(store.store_id == json.data.store_id) {
-            return {
-              ...store,
-              ...json.data,
+        let newData;
+        if(json.newRecord) {
+          newData = this.state.data.concat(json.data);
+        } else {
+          newData = this.state.data.map((store) => {
+            if(store.store_id == json.data.store_id) {
+              return {
+                ...store,
+                ...json.data,
+              }
             }
-          }
-          return store;
-        });
+            return store;
+          });
+        }
+        
         this.setState({
           data: newData,
           showForm: false,
