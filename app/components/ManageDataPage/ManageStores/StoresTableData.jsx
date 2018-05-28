@@ -9,15 +9,20 @@ export default class TableData extends React.Component {
     this.state = {
       data: this.props.data || [],
       currentStore: {
-        store_id: '',
-        name: '',
-        address: '',
-        phone: '',
-        owner: '',
-        district_id: ''
+        ...this.getResetDataField()
       },
       showForm: false
     };
+  }
+  getResetDataField() {
+    return {
+      store_id: '',
+      name: '',
+      address: '',
+      phone: '',
+      owner: '',
+      district_id: ''
+    }
   }
   handleRowClick(data) {
     this.setState({
@@ -50,12 +55,9 @@ export default class TableData extends React.Component {
         this.setState({
           data: newData,
           showForm: false,
-          store_id: '',
-          name: '',
-          address: '',
-          phone: '',
-          owner: '',
-          district_id: '',
+          currentStore: {
+            ...this.getResetDataField()
+          }
         });
       } else {
         //Might not update anything
@@ -69,10 +71,48 @@ export default class TableData extends React.Component {
       console.log('parsing failed', ex)
     });
   }
+  deleteStore(storeId) {
+    fetch(ISD_BASE_URL + `deletestore/${storeId}`, {
+      method: 'DELETE',
+    })
+    .then((response) => {
+      return response.json()
+    }).then((json) => {
+      //Update table data 
+      if(json.data) {
+        let newData = this.state.data.filter((store) => store.store_id != json.data);
+        this.setState({
+          data: newData,
+          showForm: false,
+          currentStore: {
+            ...this.getResetDataField()
+          }
+        });
+      }
+      
+    }).catch((ex) => {
+      console.log('parsing failed', ex)
+    });
+  }
   render() {
     const { data, currentStore} = this.state;
     return (
       <div>
+        <div className="ui grid equal width">
+          <div className="column left aligned">
+            <h2 style={{textTransform: 'uppercase'}}>Danh sách các nhà thuốc</h2>
+          </div>
+          <div className="column right aligned">
+            <button onClick={() => {
+              this.setState({
+                showForm: true,
+                currentStore: {
+                  ...this.getResetDataField()
+                }
+              });
+            }} type="button" className="ui button primary">Thêm hiệu thuốc</button>
+          </div>
+        </div>
         {this.state.showForm ?
           <StoreForm 
             data={currentStore}
@@ -82,13 +122,13 @@ export default class TableData extends React.Component {
             onCancel={(e) => {
               this.setState({
                 showForm: false,
-                store_id: '',
-                name: '',
-                address: '',
-                phone: '',
-                owner: '',
-                district_id: '',
+                currentStore: {
+                  ...this.getResetDataField()
+                }
               })
+            }}
+            onDelete={(storeId) => {
+              this.deleteStore(storeId);
             }}
           />
           : null}

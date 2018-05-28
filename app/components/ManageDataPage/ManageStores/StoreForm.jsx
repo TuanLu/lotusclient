@@ -91,7 +91,7 @@ class StoreForm extends React.Component {
   handleSubmit = () => {
     if(this.props.onSubmit) {
       let {store_id, name, address, owner, phone, district_id, area_id, province_id} = this.state;
-      if(store_id == '' || address == '' || district_id == '0') {
+      if(address == '' || district_id == '0') {
         alert('Hãy nhập đầy đủ thông tin ở các trường có dấu (*)');
         return false;
       }
@@ -129,11 +129,11 @@ class StoreForm extends React.Component {
           <Form.Group widths={'equal'}>
             <Form.Input 
               value={store_id} 
-              onChange={this.handleChange}
-              required 
+              onChange={this.handleChange} 
+              readOnly
               name="store_id" 
               label='Mã nhà thuốc' 
-              placeholder='Mã nhà thuốc' />
+              placeholder='Tự động sinh mã' />
             <Form.Input 
               value={name} 
               onChange={this.handleChange}
@@ -190,6 +190,13 @@ class StoreForm extends React.Component {
           </Form.Group>
           
           <Button primary>Lưu nhà thuốc</Button>
+          {this.state.store_id != '' ? 
+           <Button type="button" color="red" onClick={(e) => {
+            if(confirm('Bạn thật sự muốn xoá hiệu thuốc này?')) {
+              this.props.onDelete(this.state.store_id);
+            }
+          }}>Xoá</Button>
+          : null}
           <Button type="button" color="orange" onClick={(e) => {
             this.props.onCancel(e);
           }}>Huỷ</Button>
