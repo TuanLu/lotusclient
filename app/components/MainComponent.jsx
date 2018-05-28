@@ -3,16 +3,28 @@ import {connect} from 'react-redux'
 //import Bar from './Chart/Bar'
 import TableData from './TableData/TableData'
 import UploadFile from './UploadFile'
-import { Dimmer, Segment } from 'semantic-ui-react'
+import { Dimmer, Segment,Menu } from 'semantic-ui-react'
 import {convertObjectsToArray} from 'ISD_API'
 import {updateStateData} from 'actions'
 
 class MainComponent extends Component{
+  state = { activeItem: 'home' }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
   render() {
     const orderData = this.props.mainState.orderData || {};
     let orderDataArr = convertObjectsToArray(orderData);
+    const { activeItem } = this.state
     return (
       <div id="main" className="container ui">
+        <Menu pointing secondary>
+          <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
+          <Menu.Item name='messages' active={activeItem === 'messages'} onClick={this.handleItemClick} />
+          <Menu.Item name='friends' active={activeItem === 'friends'} onClick={this.handleItemClick} />
+          <Menu.Menu position='right'>
+            <Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.handleItemClick} />
+          </Menu.Menu>
+        </Menu>
         {orderDataArr.length ? 
         <TableData orderData={orderDataArr}/> 
         : 

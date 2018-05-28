@@ -1,18 +1,8 @@
 import actionTypes from 'ACTION_TYPES'
 import {cloneDeep} from 'lodash'
 
-
 let _designDefault = {
-    filter: {
-      year: 2017,//(new Date()).getFullYear(),
-      product: 'all',
-      area: 'all',
-      quarter: 1,
-      month: 1,
-      week: 1
-    },
-    products: [],
-    reportBy: 'theo_tinh',
+    pageId: 'stores',//orders,products,...
   },
   cloneState;
 
