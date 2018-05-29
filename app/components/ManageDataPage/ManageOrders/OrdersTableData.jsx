@@ -11,7 +11,7 @@ export default class TableData extends React.Component {
       currentStore: {
         ...this.getResetDataField()
       },
-      showForm: false
+      showForm: true
     };
   }
   getResetDataField() {

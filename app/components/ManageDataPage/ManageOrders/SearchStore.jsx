@@ -3,9 +3,17 @@ import React, { Component } from 'react'
 import { Search } from 'semantic-ui-react'
 
 export default class SearchStore extends Component {
-  componentWillMount() {
-    this.resetComponent()
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      results: [],
+      value: ''
+    };
   }
+  // componentWillMount() {
+  //   this.resetComponent()
+  // }
 
   resetComponent = () => this.setState({ isLoading: false, results: [], value: '' })
 
@@ -16,6 +24,15 @@ export default class SearchStore extends Component {
     this.setState({
       value: result.store_id
     })
+  }
+  
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if(nextProps.storeId != '') {
+      return {
+        value: nextProps.storeId
+      }
+    }
+    return true;
   }
 
   handleSearchChange = (e, { value }) => {

@@ -55,7 +55,7 @@ export default class UploadFile extends React.Component {
   }
   render() {
     return (
-      <div className="file-upload">
+      <div className="file-upload" style={this.props.style}>
         <input type="file" onChange={(e) => this.chooseFile(e)}/>
         {this.state.upload ? 
         <Progress 

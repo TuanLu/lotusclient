@@ -15,59 +15,12 @@ class OrderForm extends React.Component {
       stores: [],
       products: [],
       deliveries: [],
-      activeRow: 0
+      productIds: [],
+      storeIds: [],
+      deliveryIds: [],
+      units: this.getUnitOptions(),
+      unitIds: ['Hộp', 'Vỉ', 'Lọ']
     };
-  }
-  getStoreOptions() { 
-    if(this.state.stores.length) {
-      return this.state.stores.map((store) => {
-        return {
-          key: store.store_id,
-          value: store.store_id,
-          text: `${store.store_id} - ${store.name}`
-        }
-      });
-    } else {
-      return [{
-        key: 'empty',
-        value: '',
-        text: 'Chưa có dữ liệu'
-      }]
-    }
-  }
-  getProductsOptions() { 
-    if(this.state.products.length) {
-      return this.state.products.map((product) => {
-        return {
-          key: product.product_id,
-          value: product.product_id,
-          text: `${product.product_id} - ${product.name}`
-        }
-      });
-    } else {
-      return [{
-        key: 'empty',
-        value: '',
-        text: 'Chưa có dữ liệu'
-      }]
-    }
-  }
-  getDeliveryOptions() { 
-    if(this.state.deliveries.length) {
-      return this.state.deliveries.map((delivery) => {
-        return {
-          key: delivery.delivery_id,
-          value: delivery.delivery_id,
-          text: `${delivery.name}`
-        }
-      });
-    } else {
-      return [{
-        key: 'empty',
-        value: '',
-        text: 'Chưa có dữ liệu'
-      }]
-    }
   }
   getUnitOptions() {
     return [
@@ -79,6 +32,7 @@ class OrderForm extends React.Component {
   renderEditableNumber(row) {
     return (
       <Input
+        error={row.value == ''? true : false}
         type="number"
         min={0}
         fluid
@@ -92,6 +46,7 @@ class OrderForm extends React.Component {
     return (
       <Input
         type="text"
+        error={row.value == ''? true : false}
         required
         fluid
         defaultValue={row.value}
@@ -105,12 +60,73 @@ class OrderForm extends React.Component {
     preOrderData[row.index][row.column.id] = value;
     this.setState({ preOrderData });
   }
-  convertExcelDataToTableState(data) {
-    console.log(data);
-    this.setState({
-      preOrderData: data
-    })
+  validDataBeforeSave() {
+    let {preOrderData} = this.state;
+    //Check store_id,
+    let isOk = true;
+    if(preOrderData && preOrderData.length) {
+      console.log(preOrderData);
+      for(let i = 0; i < preOrderData.length; i++) {
+        //Valid store ID
+        if(this.state.storeIds.indexOf(preOrderData[i].store_id) == -1) {
+          alert(`Mã hiệu thuốc [${preOrderData[i].store_id}] chưa tồn tại trong hệ thống! Bạn hãy thêm hiệu thuốc mới hoặc chọn lại mã đúng!`);
+          isOk = false;
+          break;
+        }
+        //Valid product ID
+        if(this.state.productIds.indexOf(preOrderData[i].product_id) == -1) {
+          alert(`Mã sản phẩm [${preOrderData[i].product_id}] chưa tồn tại trong hệ thống! Bạn hãy thêm sản phẩm mới hoặc chọn lại mã sản phẩm đúng!`);
+          isOk = false;
+          break;
+        }
+        //Valid Time ID
+        if(preOrderData[i].date == '' || !preOrderData[i].date) {
+          alert(`Ngày mua không được để trống. Xin hãy nhập theo format ngay/thang/nam: VD: 24/05/2018`);
+          isOk = false;
+          break;
+        }
+      }
+    }
+    //Check new product
+
+    //Check date
+
+    return isOk;
   }
+  updateDataToServer() {
+    if(!this.validDataBeforeSave()) return false;
+    let data = this.state.preOrderData;
+    fetch(ISD_BASE_URL + 'addorders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      return response.json()
+    }).then((json) => {
+      //Update table data 
+      if(json.data) {
+        this.setState({
+          showForm: false,
+          preOrderData: []
+        });
+        alert(`Đã thêm ${json.data} hoá đơn vào cơ sở dữ liệu!`);
+      } else {
+        //Might not update anything
+        alert('Dữ liệu chưa được lưu vào hệ thống. Xin kiểm tra lại');
+        // this.setState({
+        //   showForm: true
+        // })
+      }
+      
+      
+    }).catch((ex) => {
+      console.log('parsing failed', ex)
+    });
+  }
+
   componentDidMount() {
     fetch(ISD_BASE_URL + 'importOrderData')
       .then((response) => {
@@ -122,10 +138,39 @@ class OrderForm extends React.Component {
         }
         if(json.data) {
           if(json.data.stores.length && json.data.products.length) {
+            //Format data before update to state
+            let productIds = [];
+            let productList = json.data.products.map((product) => {
+              productIds.push(product.product_id);
+              return {
+                key: product.product_id,
+                value: product.product_id,
+                text: product.name
+              }
+            });
+            //Delivery 
+            let deliveryIds = [];
+            let deliverytList = json.data.deliveries.map((delivery) => {
+              deliveryIds.push(delivery.delivery_id);
+              return {
+                key: delivery.delivery_id,
+                value: delivery.delivery_id,
+                text: delivery.name
+              }
+            });
+            //Stores 
+            let storeIds = [];
+            let storeList = json.data.stores.map((store) => {
+              storeIds.push(store.store_id);
+              return store;
+            });
             this.setState({
-              stores: json.data.stores,
-              products: json.data.products,
-              deliveries: json.data.deliveries
+              stores: storeList,
+              products: productList,
+              deliveries: deliverytList,
+              productIds,
+              storeIds,
+              deliveryIds
             });
             
           }
@@ -133,7 +178,6 @@ class OrderForm extends React.Component {
       }).catch((error) => {
         console.log('parsing failed', error)
       });
-
       //test data
       fetch(ISD_BASE_URL)
       .then((response) => {
@@ -144,7 +188,6 @@ class OrderForm extends React.Component {
           return false;
         }
         if(json) {
-          console.log(json);
           this.setState({
             preOrderData: json
           })
@@ -172,27 +215,35 @@ class OrderForm extends React.Component {
             <h2 style={{textTransform: 'uppercase'}}>Form nhập đơn hàng</h2>
           </div>
           <div className="column right aligned">
-            <h3>Import từ file excel</h3>
-            <UploadFile 
-              url={ISD_BASE_URL + 'upload'}
-              done={(response) => {
-                let resJson = JSON.parse(response);
-                if(resJson.status == "success" && resJson.data) {
-                  this.convertExcelDataToTableState(resJson.data);
-                }
-              }}/>
+            <div className="upload-btn primary" style={{position: 'relative'}}>
+              <button style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                pointerEvents: 'none',
+                marginTop: 10,
+                zIndex: 1
+                
+              }} type="button" className="fake-btn button ui primary">Import từ file excel</button>
+              <UploadFile 
+                url={ISD_BASE_URL + 'upload'}
+                done={(response) => {
+                  let resJson = JSON.parse(response);
+                  if(resJson.status == "success" && resJson.data) {
+                    this.setState({
+                      preOrderData: resJson.data
+                    })
+                  }
+                }}/>
+            </div>
           </div>
           <div className="column right aligned">
             <button
               style={{marginTop: 10}} 
               onClick={() => {
-              this.setState({
-                showForm: true,
-                currentStore: {
-                  ...this.getResetDataField()
-                }
-              });
-            }} type="button" className="ui button primary">Lưu hoá đơn</button>
+                this.updateDataToServer();
+              }} 
+              type="button" className="ui button teal">Lưu hoá đơn</button>
           </div>
         </div>
         <ReactTable
@@ -207,15 +258,17 @@ class OrderForm extends React.Component {
                   Cell: (row) => {
                     //console.log(row.value);
                     return (
-                      <React.Fragment>
-                        <span>{row.value != '' ? row.value : ''}</span>
-                        <SearchStore 
-                          onResultSelect={(store) => {
-                            this.updateRowData(row, store.store_id);
-                          }}  
-                          value={row.value}
-                          source={this.state.stores}/>
-                      </React.Fragment>  
+                        <div 
+                          className={this.state.storeIds.indexOf(row.value) == -1 ? 'store-item error' : ''}
+                        >
+                          {this.state.storeIds.indexOf(row.value) == -1 ? <div>{row.value}</div> : ''}
+                          <SearchStore 
+                            onResultSelect={(store) => {
+                              this.updateRowData(row, store.store_id);
+                            }}  
+                            storeId={this.state.storeIds.indexOf(row.value) == -1 ? '' : row.value}
+                            source={this.state.stores}/>
+                        </div>
                     );
                   }
                 },
@@ -224,24 +277,23 @@ class OrderForm extends React.Component {
                   accessor: "product_id",
                   minWidth: 170,
                   Cell: (row) => {
+                    
                     return (
-                      <Dropdown
-                        fluid
-                        selection
-                        style={{zIndex: 100}}
-                        search
-                        options={this.getProductsOptions()}
-                        value={row.value}
-                        onClick={(e) => {
-                          this.setState({
-                            activeRow: row.row.store_id
-                          });
-                        }}
-                        onChange={(e, data) => {
-                          this.updateRowData(row, data.value);
-                        }}
-                      />
-                      // <SearchStore fluid source={this.state.products}/>
+                      <React.Fragment>
+                        {this.state.productIds.indexOf(row.value) == -1 ? `SP mới: ${row.value}` : ''}
+                        <Dropdown
+                          error={this.state.productIds.indexOf(row.value) == -1? true : false}
+                          fluid
+                          selection
+                          style={{zIndex: 100}}
+                          search
+                          options={this.state.products}
+                          value={row.value}
+                          onChange={(e, data) => {
+                            this.updateRowData(row, data.value);
+                          }}
+                        />
+                      </React.Fragment>
                     );
                   }
                 },
@@ -252,18 +304,14 @@ class OrderForm extends React.Component {
                   Cell: (row) => {
                     return (
                       <Dropdown
+                        error={this.state.deliveryIds.indexOf(row.value) == -1? true : false}
                         selection
                         fluid
                         style={{zIndex: 0}}
                         search
-                        options={this.getDeliveryOptions()}
+                        options={this.state.deliveries}
                         onChange={(e, data) => {
                           this.updateRowData(row, data.value);
-                        }}
-                        onClick={(e) => {
-                          this.setState({
-                            activeRow: row.row.store_id
-                          });
                         }}
                         value={row.value}
                       />
@@ -297,19 +345,15 @@ class OrderForm extends React.Component {
                   Cell: (row) => {
                     return (
                       <Dropdown
+                        error={this.state.unitIds.indexOf(row.value) == -1? true : false}
                         selection
                         fluid
                         compact
                         style={{zIndex: 0}}
-                        options={this.getUnitOptions()}
+                        options={this.state.units}
                         value={row.value}
                         onChange={(e, data) => {
                           this.updateRowData(row, data.value);
-                        }}
-                        onClick={(e) => {
-                          this.setState({
-                            activeRow: row.row.store_id
-                          });
                         }}
                       />
                     );
