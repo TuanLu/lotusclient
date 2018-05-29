@@ -11,7 +11,7 @@ export default class TableData extends React.Component {
       currentStore: {
         ...this.getResetDataField()
       },
-      showForm: true
+      showForm: false
     };
   }
   getResetDataField() {
@@ -128,7 +128,7 @@ export default class TableData extends React.Component {
                   ...this.getResetDataField()
                 }
               });
-            }} type="button" className="ui button primary">Thêm hoá đơn</button>
+            }} type="button" className="ui button primary">Nhập hoá đơn</button>
           </div>
         </div>
         {this.state.showForm ?

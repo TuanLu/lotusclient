@@ -2,6 +2,7 @@ import React from 'react'
 import ReactTable from 'react-table'
 import { Loader, Input, Segment, Button, Dropdown, Search} from 'semantic-ui-react'
 import SearchStore from './SearchStore'
+import UploadFile from './../../UploadFile'
 
 class OrderForm extends React.Component {
   constructor(props) {
@@ -10,27 +11,12 @@ class OrderForm extends React.Component {
     this.renderEditableDate = this.renderEditableDate.bind(this);
     this.updateRowData = this.updateRowData.bind(this);
     this.state = {
-      preOrderData: this.prepareData(),
+      preOrderData: [],
       stores: [],
       products: [],
       deliveries: [],
       activeRow: 0
     };
-  }
-  prepareData() {
-    let preOrderData = [];
-    for(let i = 0; i < 2; i++) {
-      preOrderData.push({
-        store_id: i,
-        product_id: '',
-        delivery_id: '',
-        price: 0,
-        qty: 0,
-        date: '',
-        unit: ''
-      });
-    }
-    return preOrderData;
   }
   getStoreOptions() { 
     if(this.state.stores.length) {
@@ -96,6 +82,7 @@ class OrderForm extends React.Component {
         type="number"
         min={0}
         fluid
+        defaultValue={row.value}
         onBlur={e => {
           this.updateRowData(row, e.target.value);
         }}/>
@@ -104,9 +91,10 @@ class OrderForm extends React.Component {
   renderEditableDate(row) {
     return (
       <Input
-        type="date"
+        type="text"
         required
         fluid
+        defaultValue={row.value}
         onBlur={e => {
           this.updateRowData(row, e.target.value);
         }}/>
@@ -116,6 +104,12 @@ class OrderForm extends React.Component {
     const preOrderData = [...this.state.preOrderData];
     preOrderData[row.index][row.column.id] = value;
     this.setState({ preOrderData });
+  }
+  convertExcelDataToTableState(data) {
+    console.log(data);
+    this.setState({
+      preOrderData: data
+    })
   }
   componentDidMount() {
     fetch(ISD_BASE_URL + 'importOrderData')
@@ -139,6 +133,25 @@ class OrderForm extends React.Component {
       }).catch((error) => {
         console.log('parsing failed', error)
       });
+
+      //test data
+      fetch(ISD_BASE_URL)
+      .then((response) => {
+        return response.json();
+      }).then((json) => {
+        if(json.status && json.status == "error") {
+          console.warn(json.message);
+          return false;
+        }
+        if(json) {
+          console.log(json);
+          this.setState({
+            preOrderData: json
+          })
+        }
+      }).catch((error) => {
+        console.log('parsing failed', error)
+      });
   }
 
   render() {
@@ -149,27 +162,40 @@ class OrderForm extends React.Component {
         left: '50%',
         top: '50%',
         transform: 'translate(-50%, -50%)',
-        width: '99%',
+        width: '98%',
         background: '#fff',
         zIndex: 1000
       }}>
         {/* <pre>{JSON.stringify(this.state.preOrderData, null,2)}</pre> */}
-        <ReactTable
-          getTrProps={(state, rowInfo, column) => {
-            return {
-              onClick: (e, handleOriginal) => {
-                this.setState({
-                  activeRow: rowInfo.row.store_id
-                });
-                if (handleOriginal) {
-                  handleOriginal();
+        <div className="ui grid equal width">
+          <div className="column left aligned">
+            <h2 style={{textTransform: 'uppercase'}}>Form nhập đơn hàng</h2>
+          </div>
+          <div className="column right aligned">
+            <h3>Import từ file excel</h3>
+            <UploadFile 
+              url={ISD_BASE_URL + 'upload'}
+              done={(response) => {
+                let resJson = JSON.parse(response);
+                if(resJson.status == "success" && resJson.data) {
+                  this.convertExcelDataToTableState(resJson.data);
                 }
-              },
-              style: {
-                height: rowInfo && rowInfo.row.store_id == this.state.activeRow ? 'auto' : 'auto'
-              }
-            };
-          }}
+              }}/>
+          </div>
+          <div className="column right aligned">
+            <button
+              style={{marginTop: 10}} 
+              onClick={() => {
+              this.setState({
+                showForm: true,
+                currentStore: {
+                  ...this.getResetDataField()
+                }
+              });
+            }} type="button" className="ui button primary">Lưu hoá đơn</button>
+          </div>
+        </div>
+        <ReactTable
           columns={[
             {
               Header: "Mã hoá đơn",
@@ -179,19 +205,17 @@ class OrderForm extends React.Component {
                   accessor: "store_id",
                   minWidth: 200,
                   Cell: (row) => {
+                    //console.log(row.value);
                     return (
-                      // <Dropdown
-                      //   selection
-                      //   fluid
-                      //   style={{zIndex: 2000}}
-                      //   search
-                      //   options={this.getStoreOptions()}
-                      // />
-                      <SearchStore 
-                        onResultSelect={(store) => {
-                          this.updateRowData(row, store.store_id);
-                        }}  
-                        source={this.state.stores}/>
+                      <React.Fragment>
+                        <span>{row.value != '' ? row.value : ''}</span>
+                        <SearchStore 
+                          onResultSelect={(store) => {
+                            this.updateRowData(row, store.store_id);
+                          }}  
+                          value={row.value}
+                          source={this.state.stores}/>
+                      </React.Fragment>  
                     );
                   }
                 },
@@ -207,6 +231,7 @@ class OrderForm extends React.Component {
                         style={{zIndex: 100}}
                         search
                         options={this.getProductsOptions()}
+                        value={row.value}
                         onClick={(e) => {
                           this.setState({
                             activeRow: row.row.store_id
@@ -240,6 +265,7 @@ class OrderForm extends React.Component {
                             activeRow: row.row.store_id
                           });
                         }}
+                        value={row.value}
                       />
                     );
                   }
@@ -276,6 +302,7 @@ class OrderForm extends React.Component {
                         compact
                         style={{zIndex: 0}}
                         options={this.getUnitOptions()}
+                        value={row.value}
                         onChange={(e, data) => {
                           this.updateRowData(row, data.value);
                         }}
