@@ -108,11 +108,14 @@ class OrderForm extends React.Component {
     }).then((json) => {
       //Update table data 
       if(json.data) {
+        alert(`Đã thêm ${json.data} hoá đơn vào cơ sở dữ liệu!`);
         this.setState({
-          showForm: false,
           preOrderData: []
         });
-        alert(`Đã thêm ${json.data} hoá đơn vào cơ sở dữ liệu!`);
+        if(this.props.onAddOrderComplete) {
+          this.props.onAddOrderComplete();
+        }
+        
       } else {
         //Might not update anything
         alert('Dữ liệu chưa được lưu vào hệ thống. Xin kiểm tra lại');
@@ -178,7 +181,8 @@ class OrderForm extends React.Component {
       }).catch((error) => {
         console.log('parsing failed', error)
       });
-      //test data
+      //test data dev mode
+      return false;
       fetch(ISD_BASE_URL)
       .then((response) => {
         return response.json();
@@ -244,6 +248,15 @@ class OrderForm extends React.Component {
                 this.updateDataToServer();
               }} 
               type="button" className="ui button teal">Lưu hoá đơn</button>
+            <button
+              style={{marginTop: 10}} 
+              onClick={() => {
+                this.setState({
+                  preOrderData: []
+                })
+                this.props.onCancel();
+              }} 
+              type="button" className="ui button orange">Huỷ</button>
           </div>
         </div>
         <ReactTable

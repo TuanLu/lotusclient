@@ -6,12 +6,13 @@ export default class TableData extends React.Component {
   constructor(props) {
     super(props);
     this.handleRowClick = this.handleRowClick.bind(this);
+    this.refreshOrderData = this.refreshOrderData.bind(this);
     this.state = {
       data: this.props.data || [],
       currentStore: {
         ...this.getResetDataField()
       },
-      showForm: true
+      showForm: false
     };
   }
   getResetDataField() {
@@ -112,6 +113,24 @@ export default class TableData extends React.Component {
     }
     return false;
   }
+  refreshOrderData() {
+    fetch(ISD_BASE_URL + 'orders')
+    .then((response) => {
+      return response.json();
+    }).then((json) => {
+      if(json.status && json.status == "error") {
+        console.warn(json.message);
+        return false;
+      }
+      if(json.data && json.data.length) {
+        this.setState({
+          data: json.data
+        });
+      }
+    }).catch((error) => {
+      console.log('parsing failed', error)
+    });
+  }
   render() {
     const { data, currentStore} = this.state;
     return (
@@ -134,15 +153,16 @@ export default class TableData extends React.Component {
         {this.state.showForm ?
           <OrderForm 
             data={currentStore}
-            onSubmit={(data) => {
-              this.updateDataToServer(data);
+            onAddOrderComplete={() => {
+              this.setState({
+                showForm: false
+              });
+              //Refresh Table Data
+              this.refreshOrderData();
             }}
             onCancel={(e) => {
               this.setState({
                 showForm: false,
-                currentStore: {
-                  ...this.getResetDataField()
-                }
               })
             }}
             onDelete={(storeId) => {
