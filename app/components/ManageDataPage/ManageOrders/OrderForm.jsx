@@ -226,8 +226,8 @@ class OrderForm extends React.Component {
                 left: 0,
                 pointerEvents: 'none',
                 marginTop: 10,
-                zIndex: 1
-                
+                zIndex: 1,
+                width: '100%'
               }} type="button" className="fake-btn button ui primary">Import từ file excel</button>
               <UploadFile 
                 url={ISD_BASE_URL + 'upload'}
