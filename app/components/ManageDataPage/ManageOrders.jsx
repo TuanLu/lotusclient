@@ -1,15 +1,15 @@
 import React from 'react';
 import {Loader} from 'semantic-ui-react'
-import StoresTableData from './ManageStores/StoresTableData'
+import OrdersTableData from './ManageOrders/OrdersTableData'
 
-export default class ManageStores extends React.Component {
+export default class ManageOrders extends React.Component {
   constructor(props) {
     super(props);
     this.fetchData = this.fetchData.bind(this);
     this.state = {
       dataUpToDate: null,
       url: this.props.url,
-      stores: []
+      datasource: []
     }
   }
   fetchData() {
@@ -26,7 +26,7 @@ export default class ManageStores extends React.Component {
         if(json.data && json.data.length) {
           this.setState({
             dataUpToDate: true,
-            stores: json.data
+            datasource: json.data
           });
         }
       }).catch((error) => {
@@ -42,7 +42,7 @@ export default class ManageStores extends React.Component {
       <div className="ui segment">
         {this.state.dataUpToDate ? 
           <React.Fragment>
-            <StoresTableData data={this.state.stores}/>
+            <OrdersTableData data={this.state.datasource}/>
           </React.Fragment>
           : 
           <Loader active inline content="Loading"/>

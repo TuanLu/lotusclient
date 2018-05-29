@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTable from 'react-table'
-import StoreForm from './StoreForm'
+import OrderForm from './OrderForm'
 
 export default class TableData extends React.Component {
   constructor(props) {
@@ -11,7 +11,7 @@ export default class TableData extends React.Component {
       currentStore: {
         ...this.getResetDataField()
       },
-      showForm: false
+      showForm: true
     };
   }
   getResetDataField() {
@@ -118,7 +118,7 @@ export default class TableData extends React.Component {
       <div>
         <div className="ui grid equal width">
           <div className="column left aligned">
-            <h2 style={{textTransform: 'uppercase'}}>Danh sách các nhà thuốc</h2>
+            <h2 style={{textTransform: 'uppercase'}}>Danh sách hoá đơn</h2>
           </div>
           <div className="column right aligned">
             <button onClick={() => {
@@ -128,11 +128,11 @@ export default class TableData extends React.Component {
                   ...this.getResetDataField()
                 }
               });
-            }} type="button" className="ui button primary">Thêm hiệu thuốc</button>
+            }} type="button" className="ui button primary">Thêm hoá đơn</button>
           </div>
         </div>
         {this.state.showForm ?
-          <StoreForm 
+          <OrderForm 
             data={currentStore}
             onSubmit={(data) => {
               this.updateDataToServer(data);
@@ -171,45 +171,47 @@ export default class TableData extends React.Component {
               }
             };
           }}
+          filterable
+          data={data}
           columns={[
             {
-              Header: "Thông tin nhà thuốc",
+              Header: "Mã hoá đơn",
               columns: [
                 {
-                  Header: "Mã KH",
+                  Header: "Mã nhà thuốc",
                   accessor: "store_id",
                   maxWidth: 100
                 },
                 {
-                  Header: "Tên nhà thuốc",
-                  accessor: 'name',
-                  filterMethod: this.customFilter
+                  Header: "Mã sản phẩm",
+                  accessor: "product_id",
+                  maxWidth: 100
                 },
                 {
-                  Header: "Địa chỉ",
-                  accessor: 'address',
-                  filterMethod: this.customFilter
+                  Header: "Mã NPP",
+                  accessor: "delivery_id",
+                  maxWidth: 100
+                },
+              ]
+            },
+            {
+              Header: "Thông tin đơn hàng",
+              columns: [
+                {
+                  Header: "Ngày bán",
+                  accessor: "date",
                 },
                 {
-                  Header: "Điện thoại",
-                  accessor: 'phone'
+                  Header: "Số lượng",
+                  accessor: "qty",
                 },
                 {
-                  Header: "Chủ",
-                  accessor: 'owner'
+                  Header: "Đơn vị",
+                  accessor: "unit",
                 },
                 {
-                  Header: "Mã Quận/Huyện (*)",
-                  accessor: 'huyen',
-                  filterMethod: this.customFilterDistrict,
-                  Cell: row => (
-                    <div className={`${row.original.district_id == 0 ? 'ui warning message' : ''}`} style={{
-                      padding: 2
-                    }}>
-                      {/* <pre>{JSON.stringify(row, null, 2)}</pre> */}
-                      {row.original.district_id != 0 ? row.original.huyen : 'Chọn mã quận/huyện'}
-                    </div>
-                  )
+                  Header: "Đơn giá",
+                  accessor: "price",
                 },
               ]
             },

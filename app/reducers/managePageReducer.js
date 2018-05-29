@@ -2,7 +2,7 @@ import actionTypes from 'ACTION_TYPES'
 import {cloneDeep} from 'lodash'
 
 let _designDefault = {
-    pageId: 'stores',//orders,products,...
+    pageId: 'orders',//orders,products,...
   },
   cloneState;
 

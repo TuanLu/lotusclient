@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ManageSidebar from './ManageDataPage/ManageSidebar'
 import ManageStores from './ManageDataPage/ManageStores'
+import ManageOrders from './ManageDataPage/ManageOrders'
 
 class ManageDataPage extends Component {
   constructor(props) {
@@ -13,6 +14,9 @@ class ManageDataPage extends Component {
     switch (pageId) {
       case 'stores':
         return <ManageStores url={ISD_BASE_URL + 'stores'}/>
+        break;
+      case 'orders':
+        return <ManageOrders url={ISD_BASE_URL + 'orders'}/>
         break;
       default:
         return <h1>Render {pageId} page</h1>
