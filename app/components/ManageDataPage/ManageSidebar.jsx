@@ -16,12 +16,12 @@ class SidebarComponent extends Component {
     let {pageId} = this.props.mainState;
     let menus = [
       {
-        pageId: 'stores',
-        title: 'Quản lý nhà thuốc',
-      },
-      {
         pageId: 'orders',
         title: 'Quản lý đơn hàng'
+      },
+      {
+        pageId: 'stores',
+        title: 'Quản lý nhà thuốc',
       },
       {
         pageId: 'products',
