@@ -23,26 +23,26 @@ class ReportByArea extends Component{
         <div className="grid ui padded equal width">
           <div className="column">
             <Bar 
-              url={`http://erpapp/report?year=${year}&type=areas&product-id=${product}`}/>
+              url={`${ISD_BASE_URL}report?year=${year}&type=areas&product-id=${product}`}/>
           </div>
         </div>
         <div className="grid ui padded equal width">
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=area_quarter&product-id=${product}&area=${area}`}/>
+              url={`${ISD_BASE_URL}report?year=${year}&type=area_quarter&product-id=${product}&area=${area}`}/>
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
             <Bar
-               url={`http://erpapp/report?year=${year}&type=area_month&product-id=${product}&area=${area}`}
+               url={`${ISD_BASE_URL}report?year=${year}&type=area_month&product-id=${product}&area=${area}`}
             />
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=area_week&product-id=${product}&area=${area}`}
+              url={`${ISD_BASE_URL}report?year=${year}&type=area_week&product-id=${product}&area=${area}`}
             />
           </div>
         </div>      

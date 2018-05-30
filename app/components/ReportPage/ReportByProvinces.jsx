@@ -35,28 +35,28 @@ class ReportByProvinces extends Component{
           <div className="column">
             <Bar 
               type="horizontalBar"
-              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces&product-id=${product}&area=${area}`}/>
+              url={`${ISD_BASE_URL}reportbyprovince?year=${year}&type=provinces&product-id=${product}&area=${area}`}/>
           </div>
         </div>
         <div className="grid ui padded equal width">
           <div className="column">
             <Bar
               type="horizontalBar"
-              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_quarter&product-id=${product}&area=${area}&quarter=${quarter}`}/>
+              url={`${ISD_BASE_URL}reportbyprovince?year=${year}&type=provinces_quarter&product-id=${product}&area=${area}&quarter=${quarter}`}/>
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
           <Bar
               type="horizontalBar"
-              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_month&product-id=${product}&area=${area}&month=${month}`}/>
+              url={`${ISD_BASE_URL}reportbyprovince?year=${year}&type=provinces_month&product-id=${product}&area=${area}&month=${month}`}/>
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
           <Bar
               type="horizontalBar"
-              url={`http://erpapp/reportbyprovince?year=${year}&type=provinces_week&product-id=${product}&area=${area}&week=${week}`}/>
+              url={`${ISD_BASE_URL}reportbyprovince?year=${year}&type=provinces_week&product-id=${product}&area=${area}&week=${week}`}/>
           </div>
         </div>      
       </React.Fragment>

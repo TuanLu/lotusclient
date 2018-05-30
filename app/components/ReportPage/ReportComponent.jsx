@@ -20,24 +20,24 @@ class ReportComponent extends Component{
         <div className="grid ui padded equal width">
           <div className="column">
             <Bar 
-              url={`http://erpapp/report?year=${year}&type=year&product-id=${product}`}/>
+              url={`${ISD_BASE_URL}report?year=${year}&type=year&product-id=${product}`}/>
           </div>
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=quarter&product-id=${product}`}/>
+              url={`${ISD_BASE_URL}report?year=${year}&type=quarter&product-id=${product}`}/>
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
             <Bar
-               url={`http://erpapp/report?year=${year}&type=month&product-id=${product}`}
+               url={`${ISD_BASE_URL}report?year=${year}&type=month&product-id=${product}`}
             />
           </div>
         </div>
         <div className="ui grid padded equal width">
           <div className="column">
             <Bar
-              url={`http://erpapp/report?year=${year}&type=weekofyear&product-id=${product}`}
+              url={`${ISD_BASE_URL}report?year=${year}&type=weekofyear&product-id=${product}`}
             />
           </div>
         </div>      
