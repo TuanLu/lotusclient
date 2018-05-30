@@ -26,6 +26,7 @@ export default class TableData extends React.Component {
     }
   }
   handleRowClick(data) {
+    return false;
     this.setState({
       currentStore: data,
       showForm: true

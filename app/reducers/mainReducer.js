@@ -12,7 +12,7 @@ let _designDefault = {
       week: 1
     },
     products: [],
-    reportBy: 'theo_tinh',
+    reportBy: 'doanh_thu_tong',
   },
   cloneState;
 
