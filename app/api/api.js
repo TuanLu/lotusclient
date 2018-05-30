@@ -1,5 +1,10 @@
 import _ from "lodash";
 
+//Check if base url exists 
+if(!window.ISD_BASE_URL ||  window.ISD_BASE_URL == '') {
+  window.ISD_BASE_URL = 'http://erpapp/';
+}
+
 //JSON string return an object contain objects, we need to covert them to array
 export function convertObjectsToArray(objects) {
   let objectsArr = [];

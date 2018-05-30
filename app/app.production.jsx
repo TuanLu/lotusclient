@@ -1,37 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MainComponent from './components/MainComponent'
+import ManageDataPage from './components/ManageDataPage'
 import {Provider} from 'react-redux'
-//This store will contain
-import store from './store/configureStoreProduction'
-import {startApp, updateStateData} from 'actions'
-import {getDefaultAppProps} from 'ISD_API'
+import store from './store/managePageConfigureStoreProduction'
 //import rootSaga from './sagas';
 const rootEl = document.getElementById('isd_app')
-//let defaultProps = getDefaultAppProps();
-//store.dispatch(startApp(defaultProps));
-//Loading data from server 
-//let api = 'http://erpapp';
-fetch('/')
-  .then(function(response) {
-    return response.json()
-  }).then(function(json) {
-    store.dispatch(updateStateData({
-      orderData: json
-    }));
-    ReactDOM.render(
-      <Provider store={store}>
-        <MainComponent/>
-      </Provider>
-      ,
-      rootEl
-    );
-  }).catch(function(ex) {
-    console.log('parsing failed', ex)
-  })
 ReactDOM.render(
   <Provider store={store}>
-    <MainComponent/>
+    <ManageDataPage/>
   </Provider>
   ,
   rootEl
