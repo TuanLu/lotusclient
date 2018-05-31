@@ -98,7 +98,6 @@ class OrderForm extends React.Component {
   updateRowData(row, value) {
     const preOrderData = [...this.state.preOrderData];
     //data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-    console.log(row.index, row.column.id, value);
     preOrderData[row.index][row.column.id] = value;
     this.setState({ preOrderData });
   }
@@ -255,46 +254,6 @@ class OrderForm extends React.Component {
         console.log('parsing failed', error)
       });
   }
-  escapeRegExp(str) {
-    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-  }
-  replaceAll(str, find, replace) {
-    return str.replace(new RegExp(this.escapeRegExp(find), 'g'), replace);
-  }
-  foundDistrictId(sourceText, districtState) {
-    if(sourceText) {
-      //Search from district name if not empty, otherwise search address
-      //Remove space and convert to lowercase
-      sourceText = this.replaceAll(sourceText, ' ', '');
-      sourceText = sourceText.toLowerCase();
-      let districtName;
-      //Find district id
-      let foundItems = districtState.filter((district) => {
-        //simplefier district name
-        districtName = district.huyen.toLowerCase().replace('quận','').replace('huyện', '').replace('thành phố', '');
-        districtName = this.replaceAll(districtName, ' ', '');
-        //Special district: Quận 1 -> Quận 12
-        if(!isNaN(districtName)) {
-          districtName = `quận${districtName}`;
-        }
-        if(sourceText.indexOf(districtName) !== -1) {
-          //console.log('tim thay', districtName, 'source text : ' + sourceText);
-          return true;
-        }
-        return false;
-      });
-      
-      if(foundItems.length == 1) {
-        return foundItems[0];
-      } else if(foundItems.length > 1) {
-        //More than 1 result, need to check more
-        console.log('2 places', foundItems);
-        //return foundItems[0]['huyen'];
-
-      }
-      
-    }
-  }
 
   render() {
     let {preOrderData} = this.state;
@@ -360,19 +319,32 @@ class OrderForm extends React.Component {
               Header: "Thông tin nhà thuốc",
               columns: [
                 {
-                  Header: "Mã nhà thuốc",
+                  Header: "Tìm nhà thuốc",
                   accessor: "store_id",
                   minWidth: 200,
                   Cell: (row) => {
                     //console.log(row.value);
                     return (
-                        <div 
-                          className={this.state.storeIds.indexOf(row.value) == -1 ? 'store-item error' : ''}
-                        >
-                          {this.state.storeIds.indexOf(row.value) == -1 ? <div>{row.value}</div> : ''}
+                        <div>
                           <SearchStore 
                             onResultSelect={(store) => {
-                              this.updateRowData(row, store.store_id);
+                              //Update this store to table state
+                              let preOrderData = [...this.state.preOrderData];
+                              preOrderData[row.index][row.column.id] = store.store_id;
+                              preOrderData[row.index]["district_id"] = store.district_id;
+                              if(store.district_id != 0) {
+                                let findDistrict = this.state.districts.filter((district) => district.district_id == store.district_id);
+                                if(findDistrict.length) {
+                                  preOrderData[row.index]["district_name"] = findDistrict[0].huyen;
+                                }
+                              } else {
+                                preOrderData[row.index]["district_id"] ='';
+                                preOrderData[row.index]["district_name"] = '';
+                              }
+                              preOrderData[row.index]["address"] = store.address;
+                              preOrderData[row.index]["name"] = store.name;
+                              //console.log(store, row.index);
+                              this.setState({ preOrderData });
                             }}  
                             storeId={this.state.storeIds.indexOf(row.value) == -1 ? '' : row.value}
                             source={this.state.stores}/>
@@ -382,13 +354,13 @@ class OrderForm extends React.Component {
                 },
                 {
                   Header: "Tên nhà thuốc",
-                  accessor: "store_name",
+                  accessor: "name",
                   minWidth: 200,
                   Cell: this.renderEditable
                 },
                 {
                   Header: "Địa chỉ (*)",
-                  accessor: "store_address",
+                  accessor: "address",
                   minWidth: 300,
                   Cell: this.renderEditable
                 },
@@ -404,7 +376,22 @@ class OrderForm extends React.Component {
                           className={!row.value ? 'store-item error' : ''}
                         >
                           {row.value ? 
-                            row.value : <SearchDistrict 
+                            <div>
+                              <span>{row.value}</span>
+                              <button
+                                style={{float: 'right'}}
+                                onClick={() => {
+                                  const preOrderData = [...this.state.preOrderData];
+                                  //Reset data
+                                  preOrderData[row.index][row.column.id] = '';
+                                  preOrderData[row.index]["district_id"] = '';
+                                  this.setState({ preOrderData });
+                                }} 
+                                className="ui button icon basic compact circular tiny">
+                                <i className="icon ui search"/>
+                              </button>
+                            </div>
+                             : <SearchDistrict 
                             onResultSelect={(district) => {
                               const preOrderData = [...this.state.preOrderData];
                               preOrderData[row.index][row.column.id] = district.huyen;
