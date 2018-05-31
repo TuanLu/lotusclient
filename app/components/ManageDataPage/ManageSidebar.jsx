@@ -23,9 +23,13 @@ class SidebarComponent extends Component {
         pageId: 'stores',
         title: 'Quản lý nhà thuốc',
       },
+      // {
+      //   pageId: 'products',
+      //   title: 'Quản lý sản phẩm',
+      // },
       {
-        pageId: 'products',
-        title: 'Quản lý sản phẩm',
+        pageId: 'plan',
+        title: 'Quản lý kế hoạch',
       },
     ];
     return menus.map((menu, index) => {
