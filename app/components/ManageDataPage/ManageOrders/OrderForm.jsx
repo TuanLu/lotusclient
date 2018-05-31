@@ -109,11 +109,11 @@ class OrderForm extends React.Component {
       console.log(preOrderData);
       for(let i = 0; i < preOrderData.length; i++) {
         //Valid store ID
-        if(this.state.storeIds.indexOf(preOrderData[i].store_id) == -1) {
-          alert(`Mã hiệu thuốc [${preOrderData[i].store_id}] chưa tồn tại trong hệ thống! Bạn hãy thêm hiệu thuốc mới hoặc chọn lại mã đúng!`);
-          isOk = false;
-          break;
-        }
+        // if(this.state.storeIds.indexOf(preOrderData[i].store_id) == -1) {
+        //   alert(`Mã hiệu thuốc [${preOrderData[i].store_id}] chưa tồn tại trong hệ thống! Bạn hãy thêm hiệu thuốc mới hoặc chọn lại mã đúng!`);
+        //   isOk = false;
+        //   break;
+        // }
         //Valid product ID
         if(this.state.productIds.indexOf(preOrderData[i].product_id) == -1) {
           alert(`Mã sản phẩm [${preOrderData[i].product_id}] chưa tồn tại trong hệ thống! Bạn hãy thêm sản phẩm mới hoặc chọn lại mã sản phẩm đúng!`);
@@ -185,7 +185,7 @@ class OrderForm extends React.Component {
             //Format data before update to state
             let productIds = [];
             let productList = json.data.products.map((product) => {
-              //productIds.push(product.product_id);
+              productIds.push(product.product_id);
               return {
                 key: product.product_id,
                 value: product.product_id,
