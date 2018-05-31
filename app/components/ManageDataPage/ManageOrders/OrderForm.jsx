@@ -2,6 +2,7 @@ import React from 'react'
 import ReactTable from 'react-table'
 import { Loader, Input, Segment, Button, Dropdown, Search, TextArea} from 'semantic-ui-react'
 import SearchStore from './SearchStore'
+import SearchDistrict from './SearchDistrict'
 import UploadFile from './../../UploadFile'
 
 class OrderForm extends React.Component {
@@ -10,6 +11,7 @@ class OrderForm extends React.Component {
     this.renderEditableNumber = this.renderEditableNumber.bind(this);
     this.renderEditableText = this.renderEditableText.bind(this);
     this.renderEditableArea = this.renderEditableArea.bind(this);
+    this.renderEditable = this.renderEditable.bind(this);
     this.updateRowData = this.updateRowData.bind(this);
     this.state = {
       preOrderData: [],
@@ -52,6 +54,24 @@ class OrderForm extends React.Component {
         }}/>
     );
   }
+  renderEditable(cellInfo) {
+    return (
+      <div
+        className="editable-input"
+        style={{ backgroundColor: "#fafafa" }}
+        contentEditable
+        suppressContentEditableWarning
+        onBlur={e => {
+          const data = [...this.state.preOrderData];
+          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          this.setState({ preOrderData: data });
+        }}
+        dangerouslySetInnerHTML={{
+          __html: this.state.preOrderData[cellInfo.index][cellInfo.column.id]
+        }}
+      />
+    );
+  }
   renderEditableText(row) {
     return (
       <Input
@@ -59,7 +79,7 @@ class OrderForm extends React.Component {
         error={row.value == ''? true : false}
         required
         fluid
-        defaultValue={row.value}
+        defaultValue={this.state.preOrderData[row.index][row.column.id]}
         onBlur={e => {
           this.updateRowData(row, e.target.value);
         }}/>
@@ -77,6 +97,8 @@ class OrderForm extends React.Component {
   }
   updateRowData(row, value) {
     const preOrderData = [...this.state.preOrderData];
+    //data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+    console.log(row.index, row.column.id, value);
     preOrderData[row.index][row.column.id] = value;
     this.setState({ preOrderData });
   }
@@ -164,7 +186,7 @@ class OrderForm extends React.Component {
             //Format data before update to state
             let productIds = [];
             let productList = json.data.products.map((product) => {
-              productIds.push(product.product_id);
+              //productIds.push(product.product_id);
               return {
                 key: product.product_id,
                 value: product.product_id,
@@ -188,18 +210,22 @@ class OrderForm extends React.Component {
               return store;
             });
             //Districts
+            let districtIds = [];
             let districtList = json.data.districts.map((district) => {
-              return {
-                key: `${district.huyen} ${district.tinh} ${district.mien}`,
-                value: district.district_id,
-                text: `${district.huyen}`
-              }
+              districtIds.push(district.district_id);
+              return district;
+            });
+            //Find district base on address and update to table 
+            let findDistrict;
+            let newPreOrderData = this.state.preOrderData.map((row) => {
+
             });
             this.setState({
               stores: storeList,
               products: productList,
               deliveries: deliverytList,
               districts: districtList,
+              districtIds,
               productIds,
               storeIds,
               deliveryIds
@@ -235,11 +261,9 @@ class OrderForm extends React.Component {
   replaceAll(str, find, replace) {
     return str.replace(new RegExp(this.escapeRegExp(find), 'g'), replace);
   }
-  foundDistrictId(row, districtState) {
-    //quan_huyen or address 
-    if(row && row.row && districtState.length) {
+  foundDistrictId(sourceText, districtState) {
+    if(sourceText) {
       //Search from district name if not empty, otherwise search address
-      let sourceText = row.row.store_district || row.row.store_address;
       //Remove space and convert to lowercase
       sourceText = this.replaceAll(sourceText, ' ', '');
       sourceText = sourceText.toLowerCase();
@@ -247,25 +271,25 @@ class OrderForm extends React.Component {
       //Find district id
       let foundItems = districtState.filter((district) => {
         //simplefier district name
-        districtName = district.text.toLowerCase().replace('quận','').replace('huyện', '').replace('thành phố', '');
+        districtName = district.huyen.toLowerCase().replace('quận','').replace('huyện', '').replace('thành phố', '');
         districtName = this.replaceAll(districtName, ' ', '');
         //Special district: Quận 1 -> Quận 12
         if(!isNaN(districtName)) {
           districtName = `quận${districtName}`;
         }
         if(sourceText.indexOf(districtName) !== -1) {
-          console.log('tim thay', districtName, 'source text : ' + sourceText);
+          //console.log('tim thay', districtName, 'source text : ' + sourceText);
           return true;
         }
         return false;
       });
       
       if(foundItems.length == 1) {
-        return foundItems[0]['value'];
+        return foundItems[0];
       } else if(foundItems.length > 1) {
         //More than 1 result, need to check more
         console.log('2 places', foundItems);
-        //return foundItems[0]['value'];
+        //return foundItems[0]['huyen'];
 
       }
       
@@ -339,78 +363,60 @@ class OrderForm extends React.Component {
                   Header: "Mã nhà thuốc",
                   accessor: "store_id",
                   minWidth: 200,
-                  // Cell: (row) => {
-                  //   //console.log(row.value);
-                  //   return (
-                  //       <div 
-                  //         className={this.state.storeIds.indexOf(row.value) == -1 ? 'store-item error' : ''}
-                  //       >
-                  //         {this.state.storeIds.indexOf(row.value) == -1 ? <div>{row.value}</div> : ''}
-                  //         <SearchStore 
-                  //           onResultSelect={(store) => {
-                  //             this.updateRowData(row, store.store_id);
-                  //           }}  
-                  //           storeId={this.state.storeIds.indexOf(row.value) == -1 ? '' : row.value}
-                  //           source={this.state.stores}/>
-                  //       </div>
-                  //   );
-                  // },
+                  Cell: (row) => {
+                    //console.log(row.value);
+                    return (
+                        <div 
+                          className={this.state.storeIds.indexOf(row.value) == -1 ? 'store-item error' : ''}
+                        >
+                          {this.state.storeIds.indexOf(row.value) == -1 ? <div>{row.value}</div> : ''}
+                          <SearchStore 
+                            onResultSelect={(store) => {
+                              this.updateRowData(row, store.store_id);
+                            }}  
+                            storeId={this.state.storeIds.indexOf(row.value) == -1 ? '' : row.value}
+                            source={this.state.stores}/>
+                        </div>
+                    );
+                  },
                 },
                 {
                   Header: "Tên nhà thuốc",
                   accessor: "store_name",
                   minWidth: 200,
-                  Cell: this.renderEditableText
+                  Cell: this.renderEditable
                 },
                 {
                   Header: "Địa chỉ (*)",
                   accessor: "store_address",
-                  minWidth: 200,
-                  Cell: this.renderEditableArea
+                  minWidth: 300,
+                  Cell: this.renderEditable
                 },
                 {
-                  Header: "Miền",
-                  accessor: "store_area",
-                  Cell: (row) => {
-                    return (
-                      <Dropdown
-                        selection
-                        fluid
-                        style={{zIndex: 0}}
-                        options={this.getAreaOptions()}
-                        onChange={(e, data) => {
-                          this.updateRowData(row, data.value);
-                        }}
-                        value={row.value}
-                      />
-                    );
-                  }
-                },
-                {
-                  Header: "Tỉnh/TP",
-                  accessor: "store_province"
-                },
-                {
-                  Header: "Quận/Huyện (*)",
-                  accessor: "store_district",
+                  Header: "Quận/Huyện/TP (*)",
+                  accessor: "district_name",
                   minWidth: 200,
                   Cell: (row) => {
+                    //console.log(row.value);
+                    //let findDistrict = this.foundDistrictId(row, this.state.districts);
                     return (
-                      <Dropdown
-                        selection
-                        fluid
-                        style={{zIndex: 0}}
-                        search
-                        options={this.state.districts}
-                        onChange={(e, data) => {
-                          this.updateRowData(row, data.value);
-                        }}
-                        value={((row) => {
-                          return this.foundDistrictId(row, this.state.districts);
-                        })(row)}
-                      />
+                        <div 
+                          className={!row.value ? 'store-item error' : ''}
+                        >
+                          {row.value ? 
+                            row.value : <SearchDistrict 
+                            onResultSelect={(district) => {
+                              const preOrderData = [...this.state.preOrderData];
+                              preOrderData[row.index][row.column.id] = district.huyen;
+                              preOrderData[row.index]["district_id"] = district.district_id;
+                              this.setState({ preOrderData });
+                            }}  
+                            //districtId={this.state.districtIds.indexOf(row.value) == -1 ? '' : row.value}
+                            source={this.state.districts}/>}
+                          
+                        </div>
                     );
-                  }
+                  },
                 },
               ]
             },
@@ -425,9 +431,7 @@ class OrderForm extends React.Component {
                     
                     return (
                       <React.Fragment>
-                        {this.state.productIds.indexOf(row.value) == -1 ? `SP mới: ${row.value}` : ''}
                         <Dropdown
-                          error={this.state.productIds.indexOf(row.value) == -1? true : false}
                           fluid
                           selection
                           style={{zIndex: 100}}
@@ -446,17 +450,17 @@ class OrderForm extends React.Component {
                   Header: "Ngày bán",
                   accessor: "date",
                   minWidth: 150,
-                  Cell: this.renderEditableText
+                  Cell: this.renderEditable
                 },
                 {
                   Header: "Số lượng",
                   accessor: "qty",
-                  Cell: this.renderEditableNumber
+                  Cell: this.renderEditable
                 },
                 {
                   Header: "Đơn giá",
                   accessor: "price",
-                  Cell: this.renderEditableNumber
+                  Cell: this.renderEditable
                 },
                 {
                   Header: "Đơn vị",
@@ -482,29 +486,29 @@ class OrderForm extends React.Component {
                   Header: "Mã NPP",
                   accessor: "delivery_id",
                   minWidth: 100,
-                  Cell: (row) => {
-                    return (
-                      <Dropdown
-                        error={this.state.deliveryIds.indexOf(row.value) == -1? true : false}
-                        selection
-                        fluid
-                        style={{zIndex: 0}}
-                        search
-                        options={this.state.deliveries}
-                        onChange={(e, data) => {
-                          this.updateRowData(row, data.value);
-                        }}
-                        value={row.value}
-                      />
-                    );
-                  }
+                  // Cell: (row) => {
+                  //   return (
+                  //     <Dropdown
+                  //       error={this.state.deliveryIds.indexOf(row.value) == -1? true : false}
+                  //       selection
+                  //       fluid
+                  //       style={{zIndex: 0}}
+                  //       search
+                  //       options={this.state.deliveries}
+                  //       onChange={(e, data) => {
+                  //         this.updateRowData(row, data.value);
+                  //       }}
+                  //       value={row.value}
+                  //     />
+                  //   );
+                  // }
                 },
               ]
             },
           ]}
           filterable
           data={preOrderData}
-          defaultPageSize={100}
+          defaultPageSize={20}
           className="-striped -highlight"
           style={{
             height: "500px" // This will force the table body to overflow and scroll, since there is not enough room
