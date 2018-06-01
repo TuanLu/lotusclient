@@ -236,7 +236,7 @@ class OrderForm extends React.Component {
         console.log('parsing failed', error)
       });
       //test data dev mode
-      //return false;
+      return false;
       fetch(ISD_BASE_URL)
       .then((response) => {
         return response.json();

@@ -12,7 +12,7 @@ export default class TableData extends React.Component {
       currentStore: {
         ...this.getResetDataField()
       },
-      showForm: true
+      showForm: false
     };
   }
   getResetDataField() {
