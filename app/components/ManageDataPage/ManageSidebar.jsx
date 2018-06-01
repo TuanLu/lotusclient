@@ -12,6 +12,39 @@ class SidebarComponent extends Component {
       pageId: type
     }));
   }
+  showChartMenu() {
+    let {reportBy} = this.props.mainState;
+    let menus = [
+      {
+        reportBy: 'doanh_thu_tong',
+        title: 'Doanh thu theo năm',
+      },
+      {
+        reportBy: 'theo_mien',
+        title: 'Doanh thu theo miền'
+      },
+      {
+        reportBy: 'theo_tinh',
+        title: 'Doanh thu theo tỉnh',
+        filter: {
+          area: 'b',
+          quarter: 1
+        }
+      },
+    ];
+    return menus.map((menu, index) => {
+      return (
+        <div 
+          onClick={() => {
+            window.location.href = ISD_BASE_URL + '?page=' + menu.reportBy;
+          }}
+          key={index} 
+          className={`menu_item ${reportBy == menu.reportBy ? 'active': ''}`}>
+          <div className="info">{menu.title}</div>
+        </div>
+      );
+    });
+  }
   showMenu() {
     let {pageId} = this.props.mainState;
     let menus = [
@@ -52,6 +85,7 @@ class SidebarComponent extends Component {
     return (
       <React.Fragment>
         <div className="main_menu">
+          {this.showChartMenu()}
           {this.showMenu()}
         </div>
       </React.Fragment>

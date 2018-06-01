@@ -12,6 +12,35 @@ class SidebarComponent extends Component {
       reportBy: type
     }));
   }
+  showImportMenu() {
+    let {pageId} = this.props.mainState;
+    let menus = [
+      {
+        pageId: 'orders',
+        title: 'Quản lý đơn hàng'
+      },
+      {
+        pageId: 'stores',
+        title: 'Quản lý nhà thuốc',
+      },
+      {
+        pageId: 'plan',
+        title: 'Quản lý kế hoạch',
+      },
+    ];
+    return menus.map((menu, index) => {
+      return (
+        <div 
+          onClick={() => {
+            window.location.href = ISD_BASE_URL + 'import?page=' + menu.pageId;
+          }}
+          key={index} 
+          className={`menu_item ${pageId == menu.pageId ? 'active': ''}`}>
+          <div className="info">{menu.title}</div>
+        </div>
+      );
+    });
+  }
   showMenu() {
     let {reportBy} = this.props.mainState;
     let menus = [
@@ -62,15 +91,7 @@ class SidebarComponent extends Component {
       <React.Fragment>
         <div className="main_menu">
           {this.showMenu()}
-          <div className="menu_item">
-            <div className="info">Quản lý kế hoạch</div>
-          </div>
-          <div className="menu_item">
-            <div className="info">Quy đổi đơn vị tính</div>
-          </div>
-          <div className="menu_item">
-            <div className="info">Tất cả biểu đồ</div>
-          </div>
+          {this.showImportMenu()}
         </div>
       </React.Fragment>
     );

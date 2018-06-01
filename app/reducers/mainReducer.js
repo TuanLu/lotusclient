@@ -12,7 +12,7 @@ let _designDefault = {
       week: 1
     },
     products: [],
-    reportBy: 'doanh_thu_tong',
+    reportBy: window.ISD_CURRENT_PAGE ? window.ISD_CURRENT_PAGE : 'doanh_thu_tong',
   },
   cloneState;
 
