@@ -128,7 +128,7 @@ export default class ManagePlan extends React.Component {
     }).then((json) => {
       //Update table data 
       if(json.data) {
-        alert(`Đã thêm ${json.data} kế hoạch vào cơ sở dữ liệu!`);
+        alert(`Đã cập nhật kế hoạch vào cơ sở dữ liệu!`);
         
       } else {
         //Might not update anything
