@@ -106,7 +106,7 @@ class OrderForm extends React.Component {
     //Check store_id,
     let isOk = true;
     if(preOrderData && preOrderData.length) {
-      console.log(preOrderData);
+      //console.log(preOrderData);
       for(let i = 0; i < preOrderData.length; i++) {
         //Valid store ID
         // if(this.state.storeIds.indexOf(preOrderData[i].store_id) == -1) {

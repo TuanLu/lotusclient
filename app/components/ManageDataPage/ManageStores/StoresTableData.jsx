@@ -79,7 +79,7 @@ export default class TableData extends React.Component {
   }
   deleteStore(storeId) {
     fetch(ISD_BASE_URL + `deletestore/${storeId}`, {
-      method: 'DELETE',
+      method: 'GET',
     })
     .then((response) => {
       return response.json()
