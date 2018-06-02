@@ -236,8 +236,8 @@ class OrderForm extends React.Component {
         console.log('parsing failed', error)
       });
       //test data dev mode
-      return false;
-      fetch(ISD_BASE_URL)
+      //return false;
+      fetch(ISD_BASE_URL + 'test')
       .then((response) => {
         return response.json();
       }).then((json) => {
@@ -325,7 +325,8 @@ class OrderForm extends React.Component {
                   Cell: (row) => {
                     //console.log(row.value);
                     return (
-                        <div>
+                        <div style={{position: 'relative'}} className={row.value != '' ? 'store-exitst' : ''}>
+                          {row.value == '' ? <label className="ui teal floating left label tiny">Mới</label> : ''}
                           <SearchStore 
                             onResultSelect={(store) => {
                               //Update this store to table state
@@ -489,6 +490,27 @@ class OrderForm extends React.Component {
                   //     />
                   //   );
                   // }
+                },
+                {
+                  Header: "Action",
+                  accessor: "store_id",
+                  minWidth: 100,
+                  Cell: (row) => {
+                    return (
+                      <React.Fragment>
+                        <button
+                          onClick={() => {
+                            let title = row.row.name + ' ' + row.row.address;
+                            if(!confirm('Bạn có thật sự muốn xoá bản ghi : ' + title)) return false;
+                            const preOrderData = this.state.preOrderData.filter((order, index) => row.index != index);
+                            this.setState({ preOrderData });
+                          }} 
+                          className="ui icon button red" role="button">
+                          <i aria-hidden="true" className="remove icon"></i>
+                        </button>
+                      </React.Fragment>
+                    );
+                  }
                 },
               ]
             },
