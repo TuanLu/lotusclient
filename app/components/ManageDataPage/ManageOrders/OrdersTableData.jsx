@@ -12,12 +12,12 @@ export default class TableData extends React.Component {
       currentStore: {
         ...this.getResetDataField()
       },
-      showForm: true
+      showForm: false
     };
   }
   getResetDataField() {
     return {
-      store_id: '',
+      order_id: '',
       name: '',
       address: '',
       phone: '',
@@ -50,7 +50,7 @@ export default class TableData extends React.Component {
           newData = this.state.data.concat(json.data);
         } else {
           newData = this.state.data.map((store) => {
-            if(store.store_id == json.data.store_id) {
+            if(store.order_id == json.data.order_id) {
               return {
                 ...store,
                 ...json.data,
@@ -73,22 +73,20 @@ export default class TableData extends React.Component {
           showForm: false
         })
       }
-      
-      
     }).catch((ex) => {
       console.log('parsing failed', ex)
     });
   }
-  deleteStore(storeId) {
-    fetch(ISD_BASE_URL + `deletestore/${storeId}`, {
-      method: 'DELETE',
+  deleteOrder(orderId) {
+    fetch(ISD_BASE_URL + `deleteorder/${orderId}`, {
+      method: 'get',
     })
     .then((response) => {
       return response.json()
     }).then((json) => {
       //Update table data 
       if(json.data) {
-        let newData = this.state.data.filter((store) => store.store_id != json.data);
+        let newData = this.state.data.filter((store) => store.order_id != json.data);
         this.setState({
           data: newData,
           showForm: false,
@@ -166,9 +164,6 @@ export default class TableData extends React.Component {
                 showForm: false,
               })
             }}
-            onDelete={(storeId) => {
-              this.deleteStore(storeId);
-            }}
           />
           : null}
         <ReactTable
@@ -196,6 +191,11 @@ export default class TableData extends React.Component {
             {
               Header: "Mã hoá đơn",
               columns: [
+                {
+                  Header: "OrderID",
+                  accessor: "order_id",
+                  maxWidth: 100
+                },
                 {
                   Header: "Mã nhà thuốc",
                   accessor: "store_id",
@@ -231,6 +231,33 @@ export default class TableData extends React.Component {
                 {
                   Header: "Đơn giá",
                   accessor: "price",
+                },
+              ]
+            },
+            {
+              Header: "Actions",
+              columns: [
+                {
+                  Header: "Sửa | Xoá",
+                  accessor: "order_id",
+                  Cell: (row) => {
+                    return (
+                      <React.Fragment>
+                        <button
+                          className="ui icon button teal tiny" role="button">
+                          <i aria-hidden="true" className="edit icon"></i>
+                        </button>
+                        <button
+                          onClick={() => {
+                            if(!confirm('Bạn có thật sự muốn xoá hoá đơn : ' + row.value)) return false;
+                            this.deleteOrder(row.value);
+                          }} 
+                          className="ui icon button red tiny" role="button">
+                          <i aria-hidden="true" className="remove icon"></i>
+                        </button>
+                      </React.Fragment>
+                    );
+                  }
                 },
               ]
             },

@@ -27,7 +27,7 @@ export default class SearchDistrict extends Component {
   }
   
   static getDerivedStateFromProps(nextProps, prevState) {
-    if(nextProps.districtId != '') {
+    if(nextProps.districtId != prevState.value) {
       return {
         value: nextProps.districtId
       }

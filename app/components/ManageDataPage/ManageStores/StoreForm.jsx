@@ -190,13 +190,6 @@ class StoreForm extends React.Component {
           </Form.Group>
           
           <Button primary>Lưu nhà thuốc</Button>
-          {this.state.store_id != '' ? 
-           <Button type="button" color="red" onClick={(e) => {
-            if(confirm('Bạn thật sự muốn xoá hiệu thuốc này?')) {
-              this.props.onDelete(this.state.store_id);
-            }
-          }}>Xoá</Button>
-          : null}
           <Button type="button" color="orange" onClick={(e) => {
             this.props.onCancel(e);
           }}>Huỷ</Button>

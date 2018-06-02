@@ -27,7 +27,7 @@ export default class SearchStore extends Component {
   }
   
   static getDerivedStateFromProps(nextProps, prevState) {
-    if(nextProps.storeId != '') {
+    if(nextProps.storeId != prevState.value) {
       return {
         value: nextProps.storeId
       }

@@ -326,7 +326,7 @@ class OrderForm extends React.Component {
                     //console.log(row.value);
                     return (
                         <div style={{position: 'relative'}} className={row.value != '' ? 'store-exitst' : ''}>
-                          {row.value == '' ? <label className="ui teal floating left label tiny">Mới</label> : ''}
+                          {row.value == '' ? <label className="ui teal floating left label tiny">Mới</label> : null}
                           <SearchStore 
                             onResultSelect={(store) => {
                               //Update this store to table state

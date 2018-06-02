@@ -89,10 +89,6 @@ export default class TableData extends React.Component {
         let newData = this.state.data.filter((store) => store.store_id != json.data);
         this.setState({
           data: newData,
-          showForm: false,
-          currentStore: {
-            ...this.getResetDataField()
-          }
         });
       }
       
@@ -145,32 +141,9 @@ export default class TableData extends React.Component {
                 }
               })
             }}
-            onDelete={(storeId) => {
-              this.deleteStore(storeId);
-            }}
           />
           : null}
         <ReactTable
-          getTdProps={(state, rowInfo, column, instance) => {
-            return {
-              onClick: (e, handleOriginal) => {
-                // console.log("A Td Element was clicked!");
-                // console.log("it produced this event:", e);
-                // console.log("It was in this column:", column);
-                //console.log("It was in this row:", rowInfo);
-                //console.log("It was in this table instance:", instance);
-                this.handleRowClick(rowInfo.original);
-                // IMPORTANT! React-Table uses onClick internally to trigger
-                // events like expanding SubComponents and pivots.
-                // By default a custom 'onClick' handler will override this functionality.
-                // If you want to fire the original onClick handler, call the
-                // 'handleOriginal' function.
-                if (handleOriginal) {
-                  handleOriginal();
-                }
-              }
-            };
-          }}
           columns={[
             {
               Header: "Thông tin nhà thuốc",
@@ -210,6 +183,37 @@ export default class TableData extends React.Component {
                       {row.original.district_id != 0 ? row.original.huyen : 'Chọn mã quận/huyện'}
                     </div>
                   )
+                },
+              ]
+            },
+            {
+              Header: "Actions",
+              columns: [
+                {
+                  Header: "Sửa | Xoá",
+                  accessor: "store_id",
+                  filterable: false,
+                  Cell: (row) => {
+                    return (
+                      <React.Fragment>
+                        <button
+                          onClick={() => {
+                            this.handleRowClick(row.original);
+                          }}
+                          className="ui icon button teal tiny" role="button">
+                          <i aria-hidden="true" className="edit icon"></i>
+                        </button>
+                        <button
+                          onClick={() => {
+                            if(!confirm('Bạn có thật sự muốn xoá nhà thuốc : ' + row.value)) return false;
+                            this.deleteStore(row.value);
+                          }} 
+                          className="ui icon button red tiny" role="button">
+                          <i aria-hidden="true" className="remove icon"></i>
+                        </button>
+                      </React.Fragment>
+                    );
+                  }
                 },
               ]
             },
