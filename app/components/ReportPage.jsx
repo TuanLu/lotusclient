@@ -4,6 +4,7 @@ import Sidebar from './ReportPage/Sidebar'
 import ReportComponent from './ReportPage/ReportComponent'
 import ReportByArea from './ReportPage/ReportByArea'
 import ReportByProvinces from './ReportPage/ReportByProvinces'
+import ReportByStores from './ReportPage/ReportByStores'
 
 //Global config chart
 Chart.defaults.global.hover.mode = 'nearest';
@@ -57,6 +58,9 @@ class ReportPage extends Component {
         break;
       case 'theo_tinh':
         return <ReportByProvinces/>
+        break;
+      case 'theo_nha_thuoc':
+        return <ReportByStores/>
         break;
       default:
         return <ReportComponent/>

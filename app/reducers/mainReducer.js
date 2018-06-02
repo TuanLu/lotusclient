@@ -9,9 +9,11 @@ let _designDefault = {
       area: 'all',
       quarter: 1,
       month: 1,
-      week: 1
+      week: 1,
+      province: '1',//Hanoi = 1
     },
     products: [],
+    provinces: [],
     reportBy: window.ISD_CURRENT_PAGE ? window.ISD_CURRENT_PAGE : 'doanh_thu_tong',
   },
   cloneState;

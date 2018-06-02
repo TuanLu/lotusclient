@@ -31,6 +31,10 @@ class SidebarComponent extends Component {
           quarter: 1
         }
       },
+      // {
+      //   reportBy: 'theo_nha_thuoc',
+      //   title: 'Doanh thu theo nhà thuốc',
+      // },
     ];
     return menus.map((menu, index) => {
       return (
