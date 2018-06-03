@@ -37,9 +37,9 @@ class ManageDataPage extends Component {
               
             </div>
             <div className="header_center">
-              <h2>Quản lý dữ liệu nhà thuốc, đơn hàng, sản phẩm</h2>
+            <h2>QUẢN TRỊ KHÁCH HÀNG</h2>
             </div>
-            <div className="header_right">Liên Kết</div>
+            <div className="header_right"></div>
           </div>
           <div className="menu menu_active">
             <a href="#"><img width="200" src="images/logo-pharma.png" /></a>

@@ -77,9 +77,9 @@ class ReportPage extends Component {
               <div>Menu</div>
             </div>
             <div className="header_center">
-              <h2>BÁO CÁO NỘI BỘ DƯỢC PHẨM TUỆ ĐỨC</h2>
+              <h2>QUẢN TRỊ KHÁCH HÀNG</h2>
             </div>
-            <div className="header_right">Liên Kết</div>
+            <div className="header_right"></div>
           </div>
           <div className="menu menu_active">
             <a href="#"><img width="200" src="images/logo-pharma.png" /></a>
