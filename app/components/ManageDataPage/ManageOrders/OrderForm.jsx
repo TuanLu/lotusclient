@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactTable from 'react-table'
+import moment from 'moment'
 import { Loader, Input, Segment, Button, Dropdown, Search, TextArea} from 'semantic-ui-react'
 import SearchStore from './SearchStore'
 import SearchDistrict from './SearchDistrict'
@@ -13,6 +14,7 @@ class OrderForm extends React.Component {
     this.renderEditableArea = this.renderEditableArea.bind(this);
     this.renderEditable = this.renderEditable.bind(this);
     this.updateRowData = this.updateRowData.bind(this);
+    this.fetchData = this.fetchData.bind(this);
     this.state = {
       preOrderData: [],
       stores: [],
@@ -149,7 +151,7 @@ class OrderForm extends React.Component {
     }).then((json) => {
       //Update table data 
       if(json.data) {
-        alert(`Đã thêm ${json.data} hoá đơn vào cơ sở dữ liệu!`);
+        alert(`Đã cập nhật ${json.data} hoá đơn vào cơ sở dữ liệu!`);
         this.setState({
           preOrderData: []
         });
@@ -170,89 +172,140 @@ class OrderForm extends React.Component {
       console.log('parsing failed', ex)
     });
   }
-
-  componentDidMount() {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if(nextProps.data && nextProps.data.order_id) {
+      //Edit order
+      let orderItem = {
+        ...nextProps.data,
+        date: moment(nextProps.data.date).format('DD/MM/YYYY')
+      }
+      return {
+        order_id: orderItem.order_id,
+        preOrderData: [orderItem],
+        dataUpToDate: null
+      };
+    }
+    return true;
+  }
+  componentDidUpdate() {
+    if(this.state.dataUpToDate === null && this.state.order_id) {
+      this.fetchData(() => {
+        let newPreOrderData = [...this.state.preOrderData];
+        let storeInfo = this.state.stores.filter((store) => store.store_id == newPreOrderData[0].store_id);
+        let districtInfo = this.state.districts.filter((district) => district.district_id == storeInfo[0].district_id);
+        newPreOrderData[0] = {
+          ...newPreOrderData[0],
+          ...storeInfo[0],
+          district_name: districtInfo[0].huyen
+        }
+        this.setState({
+          dataUpToDate: true,
+          preOrderData: newPreOrderData
+        });
+      });
+    }
+  }
+  fetchData(callback) {
     fetch(ISD_BASE_URL + 'importOrderData')
-      .then((response) => {
-        return response.json();
-      }).then((json) => {
-        if(json.status && json.status == "error") {
-          console.warn(json.message);
-          return false;
-        }
-        if(json.data) {
-          if(json.data.stores.length && json.data.products.length) {
-            //Format data before update to state
-            let productIds = [];
-            let productList = json.data.products.map((product) => {
-              productIds.push(product.product_id);
-              return {
-                key: product.product_id,
-                value: product.product_id,
-                text: product.name
-              }
-            });
-            //Delivery 
-            let deliveryIds = [];
-            let deliverytList = json.data.deliveries.map((delivery) => {
-              deliveryIds.push(delivery.delivery_id);
-              return {
-                key: delivery.delivery_id,
-                value: delivery.delivery_id,
-                text: delivery.name
-              }
-            });
-            //Stores 
-            let storeIds = [];
-            let storeList = json.data.stores.map((store) => {
-              storeIds.push(store.store_id);
-              return store;
-            });
-            //Districts
-            let districtIds = [];
-            let districtList = json.data.districts.map((district) => {
-              districtIds.push(district.district_id);
-              return district;
-            });
-            //Find district base on address and update to table 
-            let findDistrict;
-            let newPreOrderData = this.state.preOrderData.map((row) => {
-
-            });
-            this.setState({
-              stores: storeList,
-              products: productList,
-              deliveries: deliverytList,
-              districts: districtList,
-              districtIds,
-              productIds,
-              storeIds,
-              deliveryIds
-            });
-            
-          }
-        }
-      }).catch((error) => {
-        console.log('parsing failed', error)
-      });
-      //test data dev mode
-      //return false;
-      fetch(ISD_BASE_URL + 'test')
-      .then((response) => {
-        return response.json();
-      }).then((json) => {
-        if(json.status && json.status == "error") {
-          console.warn(json.message);
-          return false;
-        }
-        if(json) {
+    .then((response) => {
+      return response.json();
+    }).then((json) => {
+      if(json.status && json.status == "error") {
+        console.warn(json.message);
+        return false;
+      }
+      if(json.data) {
+        if(json.data.stores.length && json.data.products.length) {
+          //Format data before update to state
+          let productIds = [];
+          let productList = json.data.products.map((product) => {
+            productIds.push(product.product_id);
+            return {
+              key: product.product_id,
+              value: product.product_id,
+              text: product.name
+            }
+          });
+          //Delivery 
+          let deliveryIds = [];
+          let deliverytList = json.data.deliveries.map((delivery) => {
+            deliveryIds.push(delivery.delivery_id);
+            return {
+              key: delivery.delivery_id,
+              value: delivery.delivery_id,
+              text: delivery.name
+            }
+          });
+          //Stores 
+          let storeIds = [];
+          let storeList = json.data.stores.map((store) => {
+            storeIds.push(store.store_id);
+            return store;
+          });
+          //Districts
+          let districtIds = [];
+          let districtList = json.data.districts.map((district) => {
+            districtIds.push(district.district_id);
+            return district;
+          });
           this.setState({
-            preOrderData: json
-          })
+            stores: storeList,
+            products: productList,
+            deliveries: deliverytList,
+            districts: districtList,
+            districtIds,
+            productIds,
+            storeIds,
+            deliveryIds
+          });
+          callback && callback();
         }
-      }).catch((error) => {
-        console.log('parsing failed', error)
-      });
+      }
+    }).catch((error) => {
+      console.log('parsing failed', error)
+    });
+    //test data dev mode
+    return false;
+    fetch(ISD_BASE_URL + 'test')
+    .then((response) => {
+      return response.json();
+    }).then((json) => {
+      if(json.status && json.status == "error") {
+        console.warn(json.message);
+        return false;
+      }
+      if(json) {
+        this.setState({
+          preOrderData: json
+        })
+      }
+    }).catch((error) => {
+      console.log('parsing failed', error)
+    });
+  }
+  componentDidMount() {
+    this.fetchData();
+  }
+  getDefaultItemField() {
+    return {
+      'store_id': '',
+      'name': '' ,
+      'address': '',
+      'product_id': '',
+      'delivery_id': '',
+      'date': '',
+      'qty': '',
+      'price': '',
+      'unit': '',
+      'district_id': '',
+      'district_name': '',
+      'name_address': ''
+    }
+  }
+  addNewOrder() {
+    this.setState({
+      preOrderData: this.state.preOrderData.concat(this.getDefaultItemField())
+    });
   }
 
   render() {
@@ -296,6 +349,12 @@ class OrderForm extends React.Component {
             </div>
           </div>
           <div className="column right aligned">
+            <button
+              style={{marginTop: 10}} 
+              onClick={() => {
+                this.addNewOrder();
+              }} 
+              type="button" className="ui button primary">Thêm hoá đơn</button>
             <button
               style={{marginTop: 10}} 
               onClick={() => {
@@ -474,26 +533,27 @@ class OrderForm extends React.Component {
                   Header: "Mã NPP",
                   accessor: "delivery_id",
                   minWidth: 100,
-                  // Cell: (row) => {
-                  //   return (
-                  //     <Dropdown
-                  //       error={this.state.deliveryIds.indexOf(row.value) == -1? true : false}
-                  //       selection
-                  //       fluid
-                  //       style={{zIndex: 0}}
-                  //       search
-                  //       options={this.state.deliveries}
-                  //       onChange={(e, data) => {
-                  //         this.updateRowData(row, data.value);
-                  //       }}
-                  //       value={row.value}
-                  //     />
-                  //   );
-                  // }
+                  Cell: (row) => {
+                    return (
+                      <Dropdown
+                        error={this.state.deliveryIds.indexOf(row.value) == -1? true : false}
+                        selection
+                        fluid
+                        style={{zIndex: 0}}
+                        search
+                        options={this.state.deliveries}
+                        onChange={(e, data) => {
+                          this.updateRowData(row, data.value);
+                        }}
+                        value={row.value}
+                      />
+                    );
+                  }
                 },
                 {
                   Header: "Action",
                   accessor: "store_id",
+                  filterable: false,
                   minWidth: 100,
                   Cell: (row) => {
                     return (

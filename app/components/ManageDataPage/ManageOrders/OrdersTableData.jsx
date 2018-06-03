@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactTable from 'react-table'
 import OrderForm from './OrderForm'
+import moment from 'moment'
 
 export default class TableData extends React.Component {
   constructor(props) {
@@ -9,7 +10,7 @@ export default class TableData extends React.Component {
     this.refreshOrderData = this.refreshOrderData.bind(this);
     this.state = {
       data: this.props.data || [],
-      currentStore: {
+      currentOrder: {
         ...this.getResetDataField()
       },
       showForm: false
@@ -26,9 +27,8 @@ export default class TableData extends React.Component {
     }
   }
   handleRowClick(data) {
-    return false;
     this.setState({
-      currentStore: data,
+      currentOrder: data,
       showForm: true
     });
   }
@@ -63,7 +63,7 @@ export default class TableData extends React.Component {
         this.setState({
           data: newData,
           showForm: false,
-          currentStore: {
+          currentOrder: {
             ...this.getResetDataField()
           }
         });
@@ -90,12 +90,11 @@ export default class TableData extends React.Component {
         this.setState({
           data: newData,
           showForm: false,
-          currentStore: {
+          currentOrder: {
             ...this.getResetDataField()
           }
         });
       }
-      
     }).catch((ex) => {
       console.log('parsing failed', ex)
     });
@@ -131,7 +130,7 @@ export default class TableData extends React.Component {
     });
   }
   render() {
-    const { data, currentStore} = this.state;
+    const { data, currentOrder} = this.state;
     return (
       <div>
         <div className="ui grid equal width">
@@ -142,7 +141,7 @@ export default class TableData extends React.Component {
             <button onClick={() => {
               this.setState({
                 showForm: true,
-                currentStore: {
+                currentOrder: {
                   ...this.getResetDataField()
                 }
               });
@@ -151,7 +150,7 @@ export default class TableData extends React.Component {
         </div>
         {this.state.showForm ?
           <OrderForm 
-            data={currentStore}
+            data={currentOrder}
             onAddOrderComplete={() => {
               this.setState({
                 showForm: false
@@ -167,26 +166,6 @@ export default class TableData extends React.Component {
           />
           : null}
         <ReactTable
-          getTdProps={(state, rowInfo, column, instance) => {
-            return {
-              onClick: (e, handleOriginal) => {
-                // console.log("A Td Element was clicked!");
-                // console.log("it produced this event:", e);
-                // console.log("It was in this column:", column);
-                //console.log("It was in this row:", rowInfo);
-                //console.log("It was in this table instance:", instance);
-                this.handleRowClick(rowInfo.original);
-                // IMPORTANT! React-Table uses onClick internally to trigger
-                // events like expanding SubComponents and pivots.
-                // By default a custom 'onClick' handler will override this functionality.
-                // If you want to fire the original onClick handler, call the
-                // 'handleOriginal' function.
-                if (handleOriginal) {
-                  handleOriginal();
-                }
-              }
-            };
-          }}
           columns={[
             {
               Header: "Mã hoá đơn",
@@ -219,6 +198,7 @@ export default class TableData extends React.Component {
                 {
                   Header: "Ngày bán",
                   accessor: "date",
+                  //Cell: (row) => moment(row.date).format('DD/MM/YYYY')
                 },
                 {
                   Header: "Số lượng",
@@ -239,11 +219,15 @@ export default class TableData extends React.Component {
               columns: [
                 {
                   Header: "Sửa | Xoá",
+                  filterable: false,
                   accessor: "order_id",
                   Cell: (row) => {
                     return (
                       <React.Fragment>
                         <button
+                          onClick={() => {
+                            this.handleRowClick(row.original);
+                          }}
                           className="ui icon button teal tiny" role="button">
                           <i aria-hidden="true" className="edit icon"></i>
                         </button>
