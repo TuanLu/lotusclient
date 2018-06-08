@@ -7,6 +7,7 @@ import ManagePlan from './ManageDataPage/ManagePlan'
 import LoginForm from './LoginForm'
 import {updateStateData} from 'actions'
 import {getTokenHeader} from 'ISD_API'
+import UserInfo from './UserInfo';
 
 class ManageDataPage extends Component {
   constructor(props) {
@@ -79,24 +80,11 @@ class ManageDataPage extends Component {
             <h2>QUẢN TRỊ KHÁCH HÀNG</h2>
             </div>
             <div className="header_right">
-              <div className="user-info" style={{margin: 10}}>
-                <p>Xin chào,<b>Admin!</b></p>
-              </div>
-              <button
-                onClick={() => {
-                  this.props.dispatch(updateStateData({
-                    showLogin: true
-                  }));
-                }} 
-                className="ui button primary inverted teal">Đăng xuất</button>
+              <UserInfo dispatch={this.props.dispatch} mainState={this.props.mainState}/>
             </div>
           </div>
           <div className="menu menu_active">
             <a href="#"><img width="200" src="images/logo-pharma.png" /></a>
-            <div className="block_ava">
-              {/* <a href="#"><img src="images/ava.jpg" /></a>
-              <p>Xin chào,<span>Admin!</span></p> */}
-            </div>
             <ManageSidebar/>
           </div>
           <div className="isd_main">
