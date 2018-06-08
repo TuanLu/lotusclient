@@ -212,6 +212,10 @@ export default class TableData extends React.Component {
                   Header: "Đơn giá",
                   accessor: "price",
                 },
+                {
+                  Header: "TDV",
+                  accessor: "tdv",
+                },
               ]
             },
             {

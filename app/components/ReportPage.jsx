@@ -74,7 +74,7 @@ class ReportPage extends Component {
         <div className="grid-container">
           <div className="header">
             <div className="header_left">
-              <div>Menu</div>
+              
             </div>
             <div className="header_center">
               <h2>QUẢN TRỊ KHÁCH HÀNG</h2>

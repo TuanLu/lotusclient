@@ -299,7 +299,8 @@ class OrderForm extends React.Component {
       'unit': '',
       'district_id': '',
       'district_name': '',
-      'name_address': ''
+      'name_address': '',
+      'tdv': ''
     }
   }
   addNewOrder() {
@@ -549,6 +550,12 @@ class OrderForm extends React.Component {
                       />
                     );
                   }
+                },
+                {
+                  Header: "Mã TDV",
+                  accessor: "tdv",
+                  minWidth: 100,
+                  Cell: this.renderEditable
                 },
                 {
                   Header: "Action",
