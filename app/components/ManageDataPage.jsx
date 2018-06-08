@@ -4,6 +4,9 @@ import ManageSidebar from './ManageDataPage/ManageSidebar'
 import ManageStores from './ManageDataPage/ManageStores'
 import ManageOrders from './ManageDataPage/ManageOrders'
 import ManagePlan from './ManageDataPage/ManagePlan'
+import LoginForm from './LoginForm'
+import {updateStateData} from 'actions'
+import {getTokenHeader} from 'ISD_API'
 
 class ManageDataPage extends Component {
   constructor(props) {
@@ -27,8 +30,44 @@ class ManageDataPage extends Component {
         break;
     }
   }
+  componentWillMount() {
+    let {mainState} = this.props;
+    if(!mainState.userInfo) {
+      let token = sessionStorage.getItem('ISD_TOKEN');
+      if(token != "" && token != null) {
+        fetch(ISD_BASE_URL + 'fetchRoles', {
+          headers: getTokenHeader()   
+        })
+        .then((response) => response.json())
+        .then((json) => {
+          if(json.userInfo) {
+            this.props.dispatch(updateStateData({
+              showLogin: false,
+              userRoles: json.scopes,
+              defaultRouter: json.scopes[0] && json.scopes[0]['path'] ? json.scopes[0]['path'] : '',
+              userInfo: json.userInfo
+            }));
+          } else if(json.status == "error") {
+            alert(json.message);
+          }
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+      }
+    } else {
+      this.props.dispatch(updateStateData({
+        defaultRouter: mainState.defaultRouter
+      }));
+    }
+  }
   render() {
-    let { pageId } = this.props.mainState;
+    let { pageId, showLogin } = this.props.mainState;
+    if(showLogin) {
+      return (
+        <LoginForm dispatch={this.props.dispatch}/>
+      );
+    }
     return (
       <React.Fragment>
         <div className="grid-container">

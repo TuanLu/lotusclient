@@ -15,6 +15,7 @@ let _designDefault = {
     products: [],
     provinces: [],
     reportBy: window.ISD_CURRENT_PAGE ? window.ISD_CURRENT_PAGE : 'doanh_thu_tong',
+    showLogin: true,
   },
   cloneState;
 

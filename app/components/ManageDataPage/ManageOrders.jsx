@@ -1,6 +1,7 @@
 import React from 'react';
 import {Loader} from 'semantic-ui-react'
 import OrdersTableData from './ManageOrders/OrdersTableData'
+import { getTokenHeader } from '../../api/api';
 
 export default class ManageOrders extends React.Component {
   constructor(props) {
@@ -15,7 +16,9 @@ export default class ManageOrders extends React.Component {
   fetchData() {
     let {url} = this.state;
     if(!url) return false;
-    fetch(url)
+    fetch(url, {
+      headers: getTokenHeader()
+    })
       .then((response) => {
         return response.json();
       }).then((json) => {

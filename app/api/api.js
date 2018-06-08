@@ -56,3 +56,14 @@ export const sortArrayByProp = (prop, unsortArr) => {
   });
   return sortedArray;
 };
+
+export const getTokenHeader = () => {
+  let token = sessionStorage.getItem('ISD_TOKEN');
+  if(token != "" && token != null) {
+    return {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    };
+  }
+}
