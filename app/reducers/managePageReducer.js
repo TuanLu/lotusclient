@@ -19,6 +19,10 @@ export default (state = _designDefault, action) => {
       break;
     case actionTypes.UPDATE_STATE_DATA:
       cloneState = cloneDeep(state);
+      if(action.updateData && action.updateData.showLogin) {
+        //Clean localStore
+        sessionStorage.setItem('ISD_TOKEN', '');
+      }
       cloneState = {
         ...cloneState,
         ...action.updateData
