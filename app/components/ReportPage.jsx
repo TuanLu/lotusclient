@@ -5,6 +5,10 @@ import ReportComponent from './ReportPage/ReportComponent'
 import ReportByArea from './ReportPage/ReportByArea'
 import ReportByProvinces from './ReportPage/ReportByProvinces'
 import ReportByStores from './ReportPage/ReportByStores'
+import LoginForm from './LoginForm'
+import {getTokenHeader} from 'ISD_API'
+import {updateStateData} from 'actions'
+import UserInfo from './UserInfo';
 
 //Global config chart
 Chart.defaults.global.hover.mode = 'nearest';
@@ -67,8 +71,45 @@ class ReportPage extends Component {
         break;
     }
   }
+  componentWillMount() {
+    let {mainState} = this.props;
+    if(!mainState.userInfo) {
+      let token = sessionStorage.getItem('ISD_TOKEN');
+      if(token != "" && token != null) {
+        fetch(ISD_BASE_URL + 'fetchRoles', {
+          headers: getTokenHeader()   
+        })
+        .then((response) => response.json())
+        .then((json) => {
+          if(json.userInfo) {
+            this.props.dispatch(updateStateData({
+              showLogin: false,
+              userRoles: json.scopes,
+              defaultRouter: json.scopes[0] && json.scopes[0]['path'] ? json.scopes[0]['path'] : '',
+              userInfo: json.userInfo
+            }));
+          } else if(json.status == "error") {
+            alert(json.message);
+          }
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+      }
+    } else {
+      this.props.dispatch(updateStateData({
+        defaultRouter: mainState.defaultRouter
+      }));
+    }
+  }
   render() {
     let { year, product } = this.props.mainState.filter;
+    let {showLogin } = this.props.mainState;
+    if(showLogin) {
+      return (
+        <LoginForm dispatch={this.props.dispatch}/>
+      );
+    }
     return (
       <React.Fragment>
         <div className="grid-container">
@@ -79,14 +120,12 @@ class ReportPage extends Component {
             <div className="header_center">
               <h2>QUẢN TRỊ KHÁCH HÀNG</h2>
             </div>
-            <div className="header_right"></div>
+            <div className="header_right">
+              <UserInfo dispatch={this.props.dispatch} mainState={this.props.mainState}/>
+            </div>
           </div>
           <div className="menu menu_active">
             <a href="#"><img width="200" src="images/logo-pharma.png" /></a>
-            <div className="block_ava">
-              <a href="#"><img src="images/ava.jpg" /></a>
-              <p>Xin chào,<span>Admin!</span></p>
-            </div>
             <Sidebar/>
           </div>
           <div className="isd_main">

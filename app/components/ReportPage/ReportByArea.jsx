@@ -20,26 +20,26 @@ class ReportByArea extends Component{
           {" | "}
           <FilterByProduct/>
         </div>
-        <div className="grid ui padded equal width">
+        <div className="grid ui equal width">
           <div className="column">
             <Bar 
               url={`${ISD_BASE_URL}report?year=${year}&type=areas&product-id=${product}`}/>
           </div>
         </div>
-        <div className="grid ui padded equal width">
+        <div className="grid ui equal width">
           <div className="column">
             <Bar
               url={`${ISD_BASE_URL}report?year=${year}&type=area_quarter&product-id=${product}&area=${area}`}/>
           </div>
         </div>
-        <div className="ui grid padded equal width">
+        <div className="ui grid equal width">
           <div className="column">
             <Bar
                url={`${ISD_BASE_URL}report?year=${year}&type=area_month&product-id=${product}&area=${area}`}
             />
           </div>
         </div>
-        <div className="ui grid padded equal width">
+        <div className="ui grid equal width">
           <div className="column">
             <Bar
               url={`${ISD_BASE_URL}report?year=${year}&type=area_week&product-id=${product}&area=${area}`}

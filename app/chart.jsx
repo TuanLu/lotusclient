@@ -5,7 +5,7 @@ import {Provider} from 'react-redux'
 import store from './store/configureStore'
 import {bootstrapApp} from 'ISD_API'
 
-const rootEl = document.getElementById('isd_chart')
+const rootEl = document.getElementById('isd_app')
 ReactDOM.render(
   <Provider store={store}>
     <ReportPage/>

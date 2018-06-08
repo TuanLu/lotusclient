@@ -93,7 +93,7 @@ class SidebarComponent extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="main_menu">
+        <div className="main_menu" style={{marginTop: 33}}>
           {this.showMenu()}
           {this.showImportMenu()}
         </div>

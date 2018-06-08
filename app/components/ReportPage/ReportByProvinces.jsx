@@ -31,28 +31,28 @@ class ReportByProvinces extends Component{
           {" | "}
           <FilterByWeek/>
         </div>
-        <div className="grid ui padded equal width">
+        <div className="grid ui equal width">
           <div className="column">
             <Bar 
               type="horizontalBar"
               url={`${ISD_BASE_URL}reportbyprovince?year=${year}&type=provinces&product-id=${product}&area=${area}`}/>
           </div>
         </div>
-        <div className="grid ui padded equal width">
+        <div className="grid ui equal width">
           <div className="column">
             <Bar
               type="horizontalBar"
               url={`${ISD_BASE_URL}reportbyprovince?year=${year}&type=provinces_quarter&product-id=${product}&area=${area}&quarter=${quarter}`}/>
           </div>
         </div>
-        <div className="ui grid padded equal width">
+        <div className="ui grid equal width">
           <div className="column">
           <Bar
               type="horizontalBar"
               url={`${ISD_BASE_URL}reportbyprovince?year=${year}&type=provinces_month&product-id=${product}&area=${area}&month=${month}`}/>
           </div>
         </div>
-        <div className="ui grid padded equal width">
+        <div className="ui grid equal width">
           <div className="column">
           <Bar
               type="horizontalBar"
