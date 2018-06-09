@@ -1,34 +1,31 @@
 import React from 'react'
-import { Button, Checkbox, Form } from 'semantic-ui-react'
+import { Form, Icon, Input, Button, message } from 'antd';
+const FormItem = Form.Item;
 import {updateStateData} from 'actions'
 
-class LoginForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = {
-      userName: '',
-      password: '',
-      loading: false
-    }
+class NormalLoginForm extends React.Component {
+  state = {
+    loading: false
   }
-  handleSubmit() {
-    if(this.state.userName == '' || this.state.password == '') {
-      alert('Tên đăng nhập hoặc mật khẩu trống!');
-      return false;
-    }
-    this.setState({
-      loading: true
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        //console.log('Received values of form: ', values);
+        this.setState({
+          loading: true
+        })
+        this.getToken({...values});
+      }
     });
+  }
+  getToken(playload) {
     fetch(ISD_BASE_URL + 'token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        userName: this.state.userName,
-        password: this.state.password
-      })
+      body: JSON.stringify(playload)
     })
     .then((response) => response.json())
     .then((json) => {
@@ -41,48 +38,50 @@ class LoginForm extends React.Component {
           defaultRouter: json.scopes[0] && json.scopes[0]['path'] ? json.scopes[0]['path'] : ''
         }));
       } else {
-        alert.log(json.message);
+        message.error(json.message, 5);
         this.setState({
           loading: false
         })
       }
     })
     .catch((error) => {
-      console(error);
+      console.warn(error);
+      message.error('Có lỗi trong quá trình đăng nhập!');
     });
   }
   render() {
-    return(
-      <div className="isd-login-form">
-        <div className="login-logo">
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <div className="login-wrapper">
+        <div className="login-logo" >
           <img src="./images/logo-pharma.png" alt="Logo"/>
         </div>
-        <Form id="loginForm">
-          <Form.Field>
-            <label>Tên đăng nhập</label>
-            <input 
-              value={this.state.userName}
-              onChange={(e) => {
-                this.setState({userName: e.target.value})
-              }}
-              required 
-              placeholder='Tên đăng nhập' />
-          </Form.Field>
-          <Form.Field>
-            <label>Mật khẩu</label>
-            <input 
-              value={this.state.password}
-              onChange={(e) => {
-                this.setState({password: e.target.value})
-              }}
-              required 
-              placeholder='Mật Khẩu' 
-              type="password" />
-          </Form.Field>
-          <Button loading={this.state.loading} onClick={this.handleSubmit} type='button' color="violet">Đăng nhập</Button>
+        <Form onSubmit={this.handleSubmit} className="login-form">
+          <FormItem>
+            {getFieldDecorator('userName', {
+              rules: [{ required: true, message: 'Nhập tên đăng nhập!' }],
+            })(
+              <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Tên đăng nhập" />
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('password', {
+              rules: [{ required: true, message: 'Nhập mật khẩu!' }],
+            })(
+              <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Mật khẩu" />
+            )}
+          </FormItem>
+          <FormItem>
+            <Button loading={this.state.loading} type="primary" htmlType="submit" className="login-form-button">
+              Đăng nhập
+            </Button>
+          </FormItem>
         </Form>
       </div>
     );
   }
 }
-export default LoginForm;
+
+const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
+
+export default WrappedNormalLoginForm;
