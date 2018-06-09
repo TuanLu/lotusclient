@@ -4,6 +4,7 @@ import ManageSidebar from './ManageDataPage/ManageSidebar'
 import ManageStores from './ManageDataPage/ManageStores'
 import ManageOrders from './ManageDataPage/ManageOrders'
 import ManagePlan from './ManageDataPage/ManagePlan'
+import ManageProduct from './ManageDataPage/ManageProducts'
 import LoginForm from './LoginForm'
 import {updateStateData} from 'actions'
 import {getTokenHeader} from 'ISD_API'
@@ -25,6 +26,9 @@ class ManageDataPage extends Component {
         break;
       case 'plan':
         return <ManagePlan url={ISD_BASE_URL + 'plan'}/>
+        break;
+      case 'products':
+        return <ManageProduct url={ISD_BASE_URL + 'products'}/>
         break;
       default:
         return <h1>Render {pageId} page</h1>

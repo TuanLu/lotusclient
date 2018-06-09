@@ -68,6 +68,10 @@ class SidebarComponent extends Component {
         pageId: 'plan',
         title: 'Quản lý kế hoạch',
       },
+      {
+        pageId: 'products',
+        title: 'Quản lý sản phẩm',
+      },
     ];
     return menus.map((menu, index) => {
       return (
