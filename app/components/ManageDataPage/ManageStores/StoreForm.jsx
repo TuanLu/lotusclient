@@ -1,5 +1,6 @@
 import React from 'react'
 import { Loader, Form, Segment, Button} from 'semantic-ui-react'
+import {Popconfirm} from 'antd'
 
 class StoreForm extends React.Component {
   constructor(props) {
@@ -190,9 +191,15 @@ class StoreForm extends React.Component {
           </Form.Group>
           
           <Button primary>Lưu nhà thuốc</Button>
-          <Button type="button" color="orange" onClick={(e) => {
-            this.props.onCancel(e);
-          }}>Huỷ</Button>
+          <Popconfirm
+            placement="left"
+            title="Bạn thật sự muốn huỷ?"
+            onConfirm={(e) => {
+              this.props.onCancel(e);
+            }}
+            >
+            <Button type="button" color="orange">Huỷ</Button>
+          </Popconfirm>
         </Form>
       </Segment>
     );

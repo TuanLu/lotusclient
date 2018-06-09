@@ -76,6 +76,10 @@ class SidebarComponent extends Component {
         pageId: 'tdv',
         title: 'Quản lý TDV',
       },
+      {
+        pageId: 'exchange',
+        title: 'Quản lý Đơn vị tính',
+      },
     ];
     return menus.map((menu, index) => {
       return (

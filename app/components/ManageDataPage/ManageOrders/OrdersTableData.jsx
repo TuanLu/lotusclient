@@ -2,6 +2,7 @@ import React from 'react';
 import ReactTable from 'react-table'
 import OrderForm from './OrderForm'
 import moment from 'moment'
+import {Popconfirm} from 'antd'
 
 export default class TableData extends React.Component {
   constructor(props) {
@@ -235,14 +236,19 @@ export default class TableData extends React.Component {
                           className="ui icon button teal tiny" role="button">
                           <i aria-hidden="true" className="edit icon"></i>
                         </button>
-                        <button
-                          onClick={() => {
-                            if(!confirm('Bạn có thật sự muốn xoá hoá đơn : ' + row.value)) return false;
+                        <Popconfirm
+                          placement="left"
+                          okType="danger"
+                          title="Bạn thật sự muốn xoá?"
+                          onConfirm={() => {
                             this.deleteOrder(row.value);
-                          }} 
-                          className="ui icon button red tiny" role="button">
-                          <i aria-hidden="true" className="remove icon"></i>
-                        </button>
+                          }}
+                          >
+                           <button
+                            className="ui icon button red tiny" role="button">
+                            <i aria-hidden="true" className="remove icon"></i>
+                          </button>
+                        </Popconfirm>
                       </React.Fragment>
                     );
                   }

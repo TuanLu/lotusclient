@@ -5,6 +5,7 @@ import { Loader, Input, Segment, Button, Dropdown, Search, TextArea} from 'seman
 import SearchStore from './SearchStore'
 import SearchDistrict from './SearchDistrict'
 import UploadFile from './../../UploadFile'
+import {Popconfirm} from 'antd'
 
 class OrderForm extends React.Component {
   constructor(props) {
@@ -362,15 +363,20 @@ class OrderForm extends React.Component {
                 this.updateDataToServer();
               }} 
               type="button" className="ui button teal">Lưu hoá đơn</button>
-            <button
-              style={{marginTop: 10}} 
-              onClick={() => {
-                this.setState({
-                  preOrderData: []
-                })
-                this.props.onCancel();
-              }} 
-              type="button" className="ui button orange">Huỷ</button>
+               <Popconfirm
+                  placement="left"
+                  title="Bạn thật sự muốn huỷ?"
+                  onConfirm={() => {
+                    this.setState({
+                      preOrderData: []
+                    })
+                    this.props.onCancel();
+                  }}
+                  >
+                    <button
+                      style={{marginTop: 10}} 
+                      type="button" className="ui button orange">Huỷ</button>
+              </Popconfirm>
           </div>
         </div>
         <ReactTable
