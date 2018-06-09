@@ -72,6 +72,10 @@ class SidebarComponent extends Component {
         pageId: 'products',
         title: 'Quản lý sản phẩm',
       },
+      {
+        pageId: 'tdv',
+        title: 'Quản lý TDV',
+      },
     ];
     return menus.map((menu, index) => {
       return (
