@@ -22,6 +22,22 @@ const EditableFormRow = Form.create()(EditableRow);
 class EditableCell extends React.Component {
   getInput = () => {
     switch (this.props.inputType) {
+      case 'product_id':
+        let products = this.props.products;
+        return (
+          <Select 
+            style={{ width: 150 }}
+            placeholder="Chọn đơn vị tính">
+           {products.map((product) => {
+              return <Select.Option 
+              key={product.product_id} 
+              value={product.product_id}>
+                {product.name}
+              </Select.Option>
+           })}
+          </Select>
+        );
+        break;
       default:
         return <Input />;
         break;
@@ -74,15 +90,29 @@ class EditableTable extends React.Component {
     };
     this.columns = [
       {
-        title: 'Dữ liệu nguồn',
-        dataIndex: 'original',
+        title: 'Mã SP',
+        dataIndex: 'product_id',
         //width: '15%',
         editable: true,
         required: true
       },
       {
-        title: 'Quy đổi thành',
-        dataIndex: 'converted',
+        title: 'Dạng vỉ',
+        dataIndex: 'vi',
+        //width: '40%',
+        editable: true,
+        required: true
+      },
+      {
+        title: 'Dạng lọ',
+        dataIndex: 'lo',
+        //width: '40%',
+        editable: true,
+        required: true
+      },
+      {
+        title: 'Dạng siro',
+        dataIndex: 'siro',
         //width: '40%',
         editable: true,
         required: true
@@ -148,10 +178,10 @@ class EditableTable extends React.Component {
   getDefaultFields() {
     return {
       id: "",
-      name: "",
-      address: "",
-      phone: "",
-      company: "",
+      product_id: "",
+      vi: "",
+      lo: "",
+      siro: "",
     };
   }
   isEditing = (record) => {
@@ -174,7 +204,7 @@ class EditableTable extends React.Component {
           ...item,
           ...row,
         };
-        fetch(ISD_BASE_URL + 'tdv/updateTdv', {
+        fetch(ISD_BASE_URL + 'exchange/updateExchange', {
           method: 'POST',
           headers: getTokenHeader(),
           body: JSON.stringify(newItemData)
@@ -212,13 +242,13 @@ class EditableTable extends React.Component {
   }
   delete = (record) => {
     if(record.id) {
-      fetch(ISD_BASE_URL + 'tdv/deleteTdv/' + record.id, {
+      fetch(ISD_BASE_URL + 'exchange/deleteExchange/' + record.id, {
         headers: getTokenHeader()
       })
       .then((response) => response.json())
       .then((json) => {
         if(json.status == 'error') {
-          message.error('Có lỗi xảy ra khi xoá sản phẩm!', 3);
+          message.error('Có lỗi xảy ra khi xoá đơn vị tính!', 3);
         } else {
           let newData = this.state.data.filter((item) => item.id != json.data);
           this.setState({data: newData});
@@ -226,7 +256,7 @@ class EditableTable extends React.Component {
         }
       })
       .catch((error) => {
-        message.error('Có lỗi xảy ra khi xoá sản phẩm!', 3);
+        message.error('Có lỗi xảy ra khi xoá đơn vị tính!', 3);
         console.log(error);
       });
     } else {
@@ -238,8 +268,24 @@ class EditableTable extends React.Component {
       }  
     }
   }
+  fetchProduct() {
+    fetch(ISD_BASE_URL + 'product')
+    .then((resopnse) => resopnse.json())
+    .then((json) => {
+      if(json.data) {
+        this.props.dispatch(updateStateData({
+          products: json.data
+        }));
+      } else {
+        message.error(json.message);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
   fetchData() {
-    fetch(ISD_BASE_URL + 'tdv/fetchTdvs', {
+    fetch(ISD_BASE_URL + 'exchange/fetchExchange', {
       headers: getTokenHeader()
     })
     .then((response) => {
@@ -250,6 +296,7 @@ class EditableTable extends React.Component {
         message.warning(json.message, 3);
       } else {
         if(json.data) {
+          console.log(json.data);
           //Add key prop for table
           let data = json.data.map((item, index) => ({...item, key: index}) );
           this.setState({data});
@@ -257,11 +304,12 @@ class EditableTable extends React.Component {
       }
     })
     .catch((error) => {
-      message.error('Có lỗi khi tải dữ liệu sản phẩm!', 3);
+      message.error('Có lỗi khi tải dữ liệu đơn vị tính!', 3);
       console.log(error);
     }); 
   }
   componentDidMount() {
+    this.fetchProduct();
     this.fetchData();
   }
   render() {
@@ -271,7 +319,7 @@ class EditableTable extends React.Component {
         cell: EditableCell,
       },
     };
-
+    let products = this.props.mainState.products;
     /**
       title?: React.ReactNode;
       key?: string;
@@ -301,7 +349,8 @@ class EditableTable extends React.Component {
           dataIndex: col.dataIndex,
           title: col.title,
           editing: this.isEditing(record),
-          required: col.required
+          required: col.required,
+          products,
         }),
       };
     });

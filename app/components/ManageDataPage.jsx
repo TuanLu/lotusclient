@@ -19,6 +19,7 @@ class ManageDataPage extends Component {
   }
   renderManagePage() {
     let {pageId} = this.props.mainState;
+    let {dispatch, mainState} = this.props;
     switch (pageId) {
       case 'stores':
         return <ManageStores url={ISD_BASE_URL + 'stores'}/>
@@ -36,7 +37,7 @@ class ManageDataPage extends Component {
         return <ManageTDV url={ISD_BASE_URL + 'tdv'}/>
         break;
       case 'exchange':
-        return <ManageExchange url={ISD_BASE_URL + 'exchange'}/>
+        return <ManageExchange mainState={mainState} dispatch={dispatch} url={ISD_BASE_URL + 'exchange'}/>
         break;
       default:
         return <h1>Render {pageId} page</h1>
