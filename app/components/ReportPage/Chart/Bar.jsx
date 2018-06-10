@@ -14,7 +14,8 @@ export default class BarChart extends React.Component {
       },
       showChart: false,
       url: this.props.url,
-      dataUpToDate: null
+      dataUpToDate: null,
+      noData: false
     }
   }
   fetchData() {
@@ -25,7 +26,7 @@ export default class BarChart extends React.Component {
         return response.json();
       }).then((json) => {
         if(json.status && json.status == "error") {
-          console.warn(json.message);
+          this.setState({noData: true, dataUpToDate: true});
           return false;
         }
         this.setState({
@@ -35,6 +36,7 @@ export default class BarChart extends React.Component {
           height: json.height,
           showChart: true,
           dataUpToDate: true,
+          noData: false,
           legend: json.legend || {}
         });
       }).catch((error) => {
@@ -126,6 +128,13 @@ export default class BarChart extends React.Component {
       },
     };
     //console.log(options);
+    if(this.state.noData) {
+      return (
+        <div className="ui segment">
+          <div className="ui message info">Chưa có dữ liệu</div>
+        </div>
+      );
+    }
     return (
       <div className="ui segment">
         {this.state.dataUpToDate ? 
