@@ -24,6 +24,18 @@ class SidebarComponent extends Component {
         title: 'Quản lý nhà thuốc',
       },
       {
+        pageId: 'products',
+        title: 'Quản lý sản phẩm',
+      },
+      {
+        pageId: 'tdv',
+        title: 'Quản lý TDV',
+      },
+      {
+        pageId: 'exchange',
+        title: 'Quản lý Đơn vị tính',
+      },
+      {
         pageId: 'plan',
         title: 'Quản lý kế hoạch',
       },

@@ -2,7 +2,7 @@ import actionTypes from 'ACTION_TYPES'
 import {cloneDeep} from 'lodash'
 
 let _designDefault = {
-    pageId: window.ISD_CURRENT_PAGE ? window.ISD_CURRENT_PAGE : 'exchange',//orders,products,...
+    pageId: window.ISD_CURRENT_PAGE ? window.ISD_CURRENT_PAGE : 'orders',//orders,products,...
     showLogin: true,
     products: []
   },

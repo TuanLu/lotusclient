@@ -60,14 +60,6 @@ class SidebarComponent extends Component {
         pageId: 'stores',
         title: 'Quản lý nhà thuốc',
       },
-      // {
-      //   pageId: 'products',
-      //   title: 'Quản lý sản phẩm',
-      // },
-      {
-        pageId: 'plan',
-        title: 'Quản lý kế hoạch',
-      },
       {
         pageId: 'products',
         title: 'Quản lý sản phẩm',
@@ -79,6 +71,10 @@ class SidebarComponent extends Component {
       {
         pageId: 'exchange',
         title: 'Quản lý Đơn vị tính',
+      },
+      {
+        pageId: 'plan',
+        title: 'Quản lý kế hoạch',
       },
     ];
     return menus.map((menu, index) => {
