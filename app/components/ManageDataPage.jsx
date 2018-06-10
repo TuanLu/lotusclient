@@ -8,6 +8,7 @@ import ManageProduct from './ManageDataPage/ManageProducts'
 import ManageTDV from './ManageDataPage/ManageTDV'
 import ManageExchange from './ManageDataPage/ManageExchange'
 import LoginForm from './LoginForm'
+import Loading from './Loading'
 import {updateStateData} from 'actions'
 import {getTokenHeader} from 'ISD_API'
 import UserInfo from './UserInfo';
@@ -16,6 +17,9 @@ class ManageDataPage extends Component {
   constructor(props) {
     super(props);
     this.renderManagePage = this.renderManagePage.bind(this);
+    this.state = {
+      loading: true
+    }
   }
   renderManagePage() {
     let {pageId} = this.props.mainState;
@@ -64,10 +68,20 @@ class ManageDataPage extends Component {
           } else if(json.status == "error") {
             alert(json.message);
           }
+          this.setState({
+            loading: false
+          })
         })
         .catch((error) => {
           console.warn(error);
+          this.setState({
+            loading: false
+          })
         });
+      } else {
+        this.setState({
+          loading: false
+        })
       }
     } else {
       this.props.dispatch(updateStateData({
@@ -76,6 +90,9 @@ class ManageDataPage extends Component {
     }
   }
   render() {
+    if(this.state.loading) {
+      return <Loading/>
+    }
     let { pageId, showLogin } = this.props.mainState;
     if(showLogin) {
       return (

@@ -5,6 +5,7 @@ import ReportComponent from './ReportPage/ReportComponent'
 import ReportByArea from './ReportPage/ReportByArea'
 import ReportByProvinces from './ReportPage/ReportByProvinces'
 import ReportByStores from './ReportPage/ReportByStores'
+import Loading from './Loading'
 import LoginForm from './LoginForm'
 import {getTokenHeader} from 'ISD_API'
 import {updateStateData} from 'actions'
@@ -53,6 +54,9 @@ class ReportPage extends Component {
   constructor(props) {
     super(props);
     this.renderReport = this.renderReport.bind(this);
+    this.state = {
+      loading: true
+    }
   }
   renderReport() {
     let {reportBy} = this.props.mainState;
@@ -91,10 +95,14 @@ class ReportPage extends Component {
           } else if(json.status == "error") {
             alert(json.message);
           }
+          this.setState({loading: false});
         })
         .catch((error) => {
           console.warn(error);
+          this.setState({loading: false});
         });
+      } else {
+        this.setState({loading: false});
       }
     } else {
       this.props.dispatch(updateStateData({
@@ -103,6 +111,9 @@ class ReportPage extends Component {
     }
   }
   render() {
+    if(this.state.loading) {
+      return <Loading/>
+    }
     let { year, product } = this.props.mainState.filter;
     let {showLogin } = this.props.mainState;
     if(showLogin) {
