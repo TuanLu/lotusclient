@@ -219,7 +219,7 @@ export default class ManagePlan extends React.Component {
               defaultPageSize={20}
               className="-striped -highlight"
               style={{
-                maxWidth: 980  
+                
               }}
             />
           </React.Fragment>
