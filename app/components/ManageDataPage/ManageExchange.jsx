@@ -360,7 +360,7 @@ class EditableTable extends React.Component {
         <div className="table-operations">
           <Row>
             <Col span={12}>
-              <h2 className="head-title">Quản lý trình dược viên</h2>
+              <h2 className="head-title">Quản lý đơn vị tính</h2>
             </Col>
             <Col span={12}>
               <div className="action-btns">

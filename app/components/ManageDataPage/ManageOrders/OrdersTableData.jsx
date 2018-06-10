@@ -136,7 +136,7 @@ export default class TableData extends React.Component {
       <div>
         <div className="ui grid equal width">
           <div className="column left aligned">
-            <h2 style={{textTransform: 'uppercase'}}>Danh sách hoá đơn</h2>
+            <h2 style={{textTransform: 'uppercase'}}>Danh sách đơn hàng</h2>
           </div>
           <div className="column right aligned">
             <button onClick={() => {
@@ -146,7 +146,7 @@ export default class TableData extends React.Component {
                   ...this.getResetDataField()
                 }
               });
-            }} type="button" className="ui button primary">Nhập hoá đơn</button>
+            }} type="button" className="ui button primary">Nhập đơn hàng</button>
           </div>
         </div>
         {this.state.showForm ?
