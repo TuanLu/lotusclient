@@ -51,6 +51,9 @@ public/ishopdesign.firebase.min.js
 public/ishopdesign.firebase.read.min.js
 public/ishopdesign.viewonly.firebase.min.js
 public/bundle.js.map
+public/js/lotuschart.min.js
+public/js/chart.vendors.min.js
+public/js/lotusimport.min.js
 .DS_Store
 .vscode
 bash.exe.stackdump
