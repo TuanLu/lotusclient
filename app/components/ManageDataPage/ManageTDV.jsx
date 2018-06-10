@@ -74,10 +74,10 @@ class EditableTable extends React.Component {
     };
     this.columns = [
       {
-        title: 'ID',
-        dataIndex: 'id',
+        title: 'Mã TDV',
+        dataIndex: 'ma_tdv',
         width: '10%',
-        editable: false,
+        editable: true,
         required: true,
       },
       {
@@ -167,6 +167,7 @@ class EditableTable extends React.Component {
   getDefaultFields() {
     return {
       id: "",
+      ma_tdv: "",
       name: "",
       address: "",
       phone: "",
