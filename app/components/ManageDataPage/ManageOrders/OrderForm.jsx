@@ -216,7 +216,8 @@ class OrderForm extends React.Component {
         return false;
       }
       if(json.data) {
-        if(json.data.stores.length && json.data.products.length) {
+        if(json.data.products 
+          && json.data.products.length) {
           //Format data before update to state
           let productIds = [];
           let productList = json.data.products.map((product) => {
@@ -260,6 +261,8 @@ class OrderForm extends React.Component {
             deliveryIds
           });
           callback && callback();
+        } else {
+          alert('Chưa có sản phẩm nào trong hệ thống! Bạn hãy nhập sản phẩm trước khi nhập đơn hàng!');
         }
       }
     }).catch((error) => {
