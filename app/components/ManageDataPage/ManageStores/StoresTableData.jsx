@@ -7,8 +7,9 @@ export default class TableData extends React.Component {
   constructor(props) {
     super(props);
     this.handleRowClick = this.handleRowClick.bind(this);
+    this.fetchData = this.fetchData.bind(this);
     this.state = {
-      data: this.props.data || [],
+      data: [],
       currentStore: {
         ...this.getResetDataField()
       },
@@ -108,6 +109,30 @@ export default class TableData extends React.Component {
       return row[filter.id].toLowerCase().includes(filter.value.toLowerCase());
     }
     return false;
+  }
+  fetchData() {
+    let {url} = this.props;
+    if(!url) return false;
+    fetch(url)
+      .then((response) => {
+        return response.json();
+      }).then((json) => {
+        if(json.status && json.status == "error") {
+          console.warn(json.message);
+          return false;
+        }
+        if(json.data && json.data.length) {
+          this.setState({
+            dataUpToDate: true,
+            data: json.data
+          });
+        }
+      }).catch((error) => {
+        console.log('parsing failed', error)
+      });
+  }
+  componentDidMount() {
+    this.fetchData();
   }
   render() {
     const { data, currentStore} = this.state;

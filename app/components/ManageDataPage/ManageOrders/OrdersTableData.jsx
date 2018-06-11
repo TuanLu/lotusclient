@@ -22,7 +22,6 @@ export default class TableData extends React.Component {
   fetchData() {
     let {url} = this.props;
     if(!url) return false;
-    console.log(this.props.url);
     fetch(url, {
       headers: getTokenHeader()
     })
