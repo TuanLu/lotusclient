@@ -3,19 +3,45 @@ import ReactTable from 'react-table'
 import OrderForm from './OrderForm'
 import moment from 'moment'
 import {Popconfirm} from 'antd'
+import {getTokenHeader} from 'ISD_API'
 
 export default class TableData extends React.Component {
   constructor(props) {
     super(props);
     this.handleRowClick = this.handleRowClick.bind(this);
     this.refreshOrderData = this.refreshOrderData.bind(this);
+    this.fetchData = this.fetchData.bind(this);
     this.state = {
-      data: this.props.data || [],
+      data: [],
       currentOrder: {
         ...this.getResetDataField()
       },
       showForm: false
     };
+  }
+  fetchData() {
+    let {url} = this.props;
+    if(!url) return false;
+    console.log(this.props.url);
+    fetch(url, {
+      headers: getTokenHeader()
+    })
+      .then((response) => {
+        return response.json();
+      }).then((json) => {
+        if(json.status && json.status == "error") {
+          console.warn(json.message);
+          return false;
+        }
+        if(json.data && json.data.length) {
+          this.setState({
+            //dataUpToDate: true,
+            data: json.data
+          });
+        }
+      }).catch((error) => {
+        console.log('parsing failed', error)
+      });
   }
   getResetDataField() {
     return {
@@ -129,6 +155,9 @@ export default class TableData extends React.Component {
     }).catch((error) => {
       console.log('parsing failed', error)
     });
+  }
+  componentDidMount() {
+    this.fetchData();
   }
   render() {
     const { data, currentOrder} = this.state;
