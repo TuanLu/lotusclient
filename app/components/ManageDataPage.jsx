@@ -6,6 +6,7 @@ import ManageOrders from './ManageDataPage/ManageOrders'
 import ManagePlan from './ManageDataPage/ManagePlan'
 import ManageProduct from './ManageDataPage/ManageProducts'
 import ManageTDV from './ManageDataPage/ManageTDV'
+import ManageAgency from './ManageDataPage/ManageAgency'
 import ManageExchange from './ManageDataPage/ManageExchange'
 import LoginForm from './LoginForm'
 import Loading from './Loading'
@@ -39,6 +40,9 @@ class ManageDataPage extends Component {
         break;
       case 'tdv':
         return <ManageTDV url={ISD_BASE_URL + 'tdv'}/>
+        break;
+      case 'agency':
+        return <ManageAgency url={ISD_BASE_URL + 'agency'}/>
         break;
       case 'exchange':
         return <ManageExchange mainState={mainState} dispatch={dispatch} url={ISD_BASE_URL + 'exchange'}/>

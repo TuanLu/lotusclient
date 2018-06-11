@@ -17,7 +17,6 @@ class FilterByMonth extends React.Component {
   render() {
     return (
       <Dropdown 
-        compact
         onChange={(event, data) => {
           if(this.props.mainState.filter.month == data.value) return false;
           this.props.dispatch(updateStateData({

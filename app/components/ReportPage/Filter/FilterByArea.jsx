@@ -12,17 +12,17 @@ let areaOptions = [
   {
     key: 'b',
     value: 'b',
-    text: 'Bắc'
+    text: 'Miền Bắc'
   },
   {
     key: 't',
     value: 't',
-    text: 'Trung'
+    text: 'Miền Trung'
   },
   {
     key: 'n',
     value: 'n',
-    text: 'Nam'
+    text: 'Miền Nam'
   },
   {
     key: 'cod',
@@ -35,7 +35,6 @@ class FilterByArea extends React.Component {
   render() {
     return (
       <Dropdown 
-        compact
         onChange={(event, data) => {
           if(this.props.mainState.filter.area == data.value) return false;
           this.props.dispatch(updateStateData({

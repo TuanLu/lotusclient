@@ -39,9 +39,9 @@ class OrderForm extends React.Component {
   }
   getAreaOptions() {
     return [
-      {key: 'Bắc', value: 'Bắc', text: 'Bắc'},
-      {key: 'Trung', value: 'Trung', text: 'Trung'},
-      {key: 'Nam', value: 'Nam', text: 'Nam'},
+      {key: 'Bắc', value: 'Bắc', text: 'Miền Bắc'},
+      {key: 'Trung', value: 'Trung', text: 'Miền Trung'},
+      {key: 'Nam', value: 'Nam', text: 'Miền Nam'},
     ];
   }
   renderEditableNumber(row) {
