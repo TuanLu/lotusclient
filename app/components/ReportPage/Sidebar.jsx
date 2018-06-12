@@ -21,7 +21,7 @@ class SidebarComponent extends Component {
       },
       {
         pageId: 'orders',
-        title: 'Quản lý đơn hàng 333'
+        title: 'Quản lý đơn hàng'
       },
       {
         pageId: 'stores',

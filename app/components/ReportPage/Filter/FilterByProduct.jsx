@@ -52,8 +52,7 @@ class Product extends React.Component {
   }
   render() {
     return (
-      <Dropdown 
-        compact
+      <Dropdown
         onChange={(event, data) => {
           if(this.props.mainState.filter.product == data.value) return false;
           this.props.dispatch(updateStateData({
